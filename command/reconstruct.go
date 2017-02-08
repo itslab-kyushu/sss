@@ -26,7 +26,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/itslab-kyushu/cgss/sss"
+	"github.com/itslab-kyushu/sss/sss"
 	"github.com/urfave/cli"
 )
 
