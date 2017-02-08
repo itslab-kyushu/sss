@@ -1,7 +1,7 @@
 # An implementation of Shamir's secret sharing
 [![GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
 [![Build Status](https://travis-ci.org/itslab-kyushu/sss.svg?branch=master)](https://travis-ci.org/itslab-kyushu/sss)
-[![Release](https://img.shields.io/badge/release-0.1.0-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.1.0)
+[![Release](https://img.shields.io/badge/release-0.1.1-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.1.1)
 
 ## Installation
 ```sh
