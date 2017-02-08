@@ -17,10 +17,10 @@ build:
 
 .PHONY: release
 release:
-	ghr  -u jkawamoto  v$(VERSION) pkg/$(VERSION)
+	ghr  -u itslab-kyushu  v$(VERSION) pkg/$(VERSION)
 
 .PHONY: test
-test: 
+test:
 	go test -v ./...
 
 .PHONY: get-deps
