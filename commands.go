@@ -43,7 +43,7 @@ var Commands = []cli.Command{
 		Flags: []cli.Flag{
 			cli.IntFlag{
 				Name:  "chunk",
-				Usage: "Byte `size` of eash chunk.",
+				Usage: "Byte `size` of each chunk.",
 				Value: 256,
 			},
 		},
