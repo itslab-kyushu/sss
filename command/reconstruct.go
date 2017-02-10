@@ -22,10 +22,14 @@
 package command
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"runtime"
 	"strings"
+
+	"golang.org/x/sync/errgroup"
 
 	"github.com/itslab-kyushu/sss/sss"
 	"github.com/ulikunitz/xz"
@@ -56,30 +60,49 @@ func CmdReconstruct(c *cli.Context) error {
 
 }
 
-func cmdReconstruct(opt *reconstructOpt) error {
+func cmdReconstruct(opt *reconstructOpt) (err error) {
+
+	wg, ctx := errgroup.WithContext(context.Background())
+	semaphore := make(chan struct{}, runtime.NumCPU())
 
 	shares := make([]sss.Share, len(opt.ShareFiles))
 	for i, f := range opt.ShareFiles {
 
-		fp, err := os.Open(f)
-		if err != nil {
-			return err
-		}
-		defer fp.Close()
+		func(i int, f string) {
 
-		r, err := xz.NewReader(fp)
-		if err != nil {
-			return err
-		}
-		data, err := ioutil.ReadAll(r)
-		if err != nil {
-			return err
-		}
+			select {
+			case <-ctx.Done():
+				return
+			case semaphore <- struct{}{}:
+				wg.Go(func() (err error) {
+					defer func() { <-semaphore }()
 
-		if err = json.Unmarshal(data, &shares[i]); err != nil {
-			return err
-		}
+					fp, err := os.Open(f)
+					if err != nil {
+						return
+					}
+					defer fp.Close()
 
+					r, err := xz.NewReader(fp)
+					if err != nil {
+						return
+					}
+					data, err := ioutil.ReadAll(r)
+					if err != nil {
+						return
+					}
+					return json.Unmarshal(data, &shares[i])
+
+				})
+
+			}
+
+		}(i, f)
+
+	}
+
+	if err = wg.Wait(); err != nil {
+		return err
 	}
 
 	secret, err := sss.Reconstruct(shares)

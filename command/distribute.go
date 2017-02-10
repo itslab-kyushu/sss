@@ -22,11 +22,15 @@
 package command
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"runtime"
 	"strconv"
+
+	"golang.org/x/sync/errgroup"
 
 	"github.com/itslab-kyushu/sss/sss"
 	"github.com/ulikunitz/xz"
@@ -76,37 +80,58 @@ func cmdDistribute(opt *distributeOpt) (err error) {
 		return
 	}
 
+	wg, ctx := errgroup.WithContext(context.Background())
+	semaphore := make(chan struct{}, runtime.NumCPU())
 	for i, s := range shares {
 
-		data, err := json.Marshal(s)
-		if err != nil {
-			return err
-		}
+		func(i int, s sss.Share) {
 
-		fp, err := os.OpenFile(fmt.Sprintf("%s.%d.xz", opt.Filename, i), os.O_WRONLY|os.O_CREATE, 0644)
-		if err != nil {
-			return err
-		}
-		defer fp.Close()
+			select {
+			case <-ctx.Done():
+				return
+			case semaphore <- struct{}{}:
+				wg.Go(func() (err error) {
+					defer func() { <-semaphore }()
 
-		w, err := xz.NewWriter(fp)
-		if err != nil {
-			return err
-		}
-		defer w.Close()
+					data, err := json.Marshal(s)
+					if err != nil {
+						return
+					}
 
-		for {
-			n, err := w.Write(data)
-			if err != nil {
-				return err
+					fp, err := os.OpenFile(fmt.Sprintf("%s.%d.xz", opt.Filename, i), os.O_WRONLY|os.O_CREATE, 0644)
+					if err != nil {
+						return
+					}
+					defer fp.Close()
+
+					w, err := xz.NewWriter(fp)
+					if err != nil {
+						return
+					}
+					defer w.Close()
+
+					for {
+						select {
+						case <-ctx.Done():
+							return ctx.Err()
+						default:
+							n, err := w.Write(data)
+							if err != nil {
+								return err
+							}
+							if n == len(data) {
+								return nil
+							}
+							data = data[n:]
+						}
+					}
+
+				})
 			}
-			if n == len(data) {
-				break
-			}
-			data = data[n:]
-		}
+
+		}(i, s)
 
 	}
 
-	return nil
+	return wg.Wait()
 }
