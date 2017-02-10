@@ -5,12 +5,24 @@
 [![Release](https://img.shields.io/badge/release-0.2.0-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.2.0)
 
 ## Installation
+If you want to use this software as a library or you're familiar with Go,
+
 ```sh
 $ go get github.com/itslab-kyushu/sss
 ```
 
-Compiled binaries are also available on
+If you're a [Homebrew](http://brew.sh/) user,
+
+```sh
+$ brew tap itslab-kyushu/sss
+$ brew install sss
+```
+
+Otherwise, you can fine compiled binaries on
 [Github](https://github.com/itslab-kyushu/sss/releases).
+After downloading a binary to your environment, decompress and put it in a path
+included in $PATH.
+
 
 ## Usage
 ### Distribute
