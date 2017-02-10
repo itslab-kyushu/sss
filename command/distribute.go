@@ -25,9 +25,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strconv"
 
 	"github.com/itslab-kyushu/sss/sss"
+	"github.com/ulikunitz/xz"
 	"github.com/urfave/cli"
 )
 
@@ -81,9 +83,27 @@ func cmdDistribute(opt *distributeOpt) (err error) {
 			return err
 		}
 
-		filename := fmt.Sprintf("%s.%d.json", opt.Filename, i)
-		if err = ioutil.WriteFile(filename, data, 0644); err != nil {
+		fp, err := os.OpenFile(fmt.Sprintf("%s.%d.xz", opt.Filename, i), os.O_WRONLY|os.O_CREATE, 0644)
+		if err != nil {
 			return err
+		}
+		defer fp.Close()
+
+		w, err := xz.NewWriter(fp)
+		if err != nil {
+			return err
+		}
+		defer w.Close()
+
+		for {
+			n, err := w.Write(data)
+			if err != nil {
+				return err
+			}
+			if n == len(data) {
+				break
+			}
+			data = data[n:]
 		}
 
 	}

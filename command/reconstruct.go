@@ -24,9 +24,11 @@ package command
 import (
 	"encoding/json"
 	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/itslab-kyushu/sss/sss"
+	"github.com/ulikunitz/xz"
 	"github.com/urfave/cli"
 )
 
@@ -59,7 +61,17 @@ func cmdReconstruct(opt *reconstructOpt) error {
 	shares := make([]sss.Share, len(opt.ShareFiles))
 	for i, f := range opt.ShareFiles {
 
-		data, err := ioutil.ReadFile(f)
+		fp, err := os.Open(f)
+		if err != nil {
+			return err
+		}
+		defer fp.Close()
+
+		r, err := xz.NewReader(fp)
+		if err != nil {
+			return err
+		}
+		data, err := ioutil.ReadAll(r)
 		if err != nil {
 			return err
 		}
