@@ -27,7 +27,7 @@ googleAnalytics = "UA-89247555-1"
 	github_button  = true
 	travis_button  = false
 	codecov_button = false
-	gratipay = ""
+	gratipay = "~jkawamoto"
 
 	show_relations = false
 
