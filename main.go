@@ -23,11 +23,15 @@ package main
 
 import (
 	"os"
+	"runtime"
 
 	"github.com/urfave/cli"
 )
 
 func main() {
+
+	cpus := runtime.NumCPU()
+	runtime.GOMAXPROCS(cpus)
 
 	app := cli.NewApp()
 	app.Name = Name
@@ -45,7 +49,11 @@ func main() {
 	app.Copyright = `sss  Copyright (C) 2017  Junpei Kawamoto
 This program comes with ABSOLUTELY NO WARRANTY.
 This is free software, and you are welcome to redistribute it
-under certain conditions.`
+under certain conditions.
+
+See http://itslab-kyushu.github.io/sss/licenses/ for more
+information.
+`
 
 	app.Run(os.Args)
 }
