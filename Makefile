@@ -13,7 +13,7 @@ default: build
 
 .PHONY: build
 build:
-	goxc -d=pkg -pv=$(VERSION)
+	goxc -d=pkg -pv=$(VERSION) -os="linux,darwin,windows,freebsd,openbsd"
 
 .PHONY: release
 release:
