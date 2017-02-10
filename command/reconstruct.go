@@ -24,6 +24,8 @@ package command
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"runtime"
@@ -31,6 +33,7 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
+	"github.com/cheggaaa/pb"
 	"github.com/itslab-kyushu/sss/sss"
 	"github.com/ulikunitz/xz"
 	"github.com/urfave/cli"
@@ -39,6 +42,7 @@ import (
 type reconstructOpt struct {
 	ShareFiles []string
 	OutputFile string
+	Log        io.Writer
 }
 
 // CmdReconstruct executes reconstruct command.
@@ -55,12 +59,24 @@ func CmdReconstruct(c *cli.Context) error {
 	if opt.OutputFile == "" {
 		opt.OutputFile = outputFile(opt.ShareFiles[0])
 	}
+	if c.Bool("quiet") {
+		opt.Log = ioutil.Discard
+	} else {
+		opt.Log = os.Stderr
+	}
 
 	return cmdReconstruct(opt)
 
 }
 
 func cmdReconstruct(opt *reconstructOpt) (err error) {
+
+	fmt.Fprint(opt.Log, "Reading share files.")
+	bar := pb.New(len(opt.ShareFiles))
+	bar.Output = opt.Log
+	bar.Prefix("Files")
+	bar.Start()
+	defer bar.Finish()
 
 	wg, ctx := errgroup.WithContext(context.Background())
 	semaphore := make(chan struct{}, runtime.NumCPU())
@@ -76,6 +92,7 @@ func cmdReconstruct(opt *reconstructOpt) (err error) {
 			case semaphore <- struct{}{}:
 				wg.Go(func() (err error) {
 					defer func() { <-semaphore }()
+					defer bar.Increment()
 
 					fp, err := os.Open(f)
 					if err != nil {
@@ -105,10 +122,13 @@ func cmdReconstruct(opt *reconstructOpt) (err error) {
 		return err
 	}
 
+	fmt.Fprintln(opt.Log, "Reconstructing the secret.")
 	secret, err := sss.Reconstruct(shares)
 	if err != nil {
 		return err
 	}
+
+	fmt.Fprintln(opt.Log, "Writing the secret file.")
 	return ioutil.WriteFile(opt.OutputFile, secret, 0644)
 
 }

@@ -25,6 +25,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"runtime"
@@ -32,6 +33,7 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
+	"github.com/cheggaaa/pb"
 	"github.com/itslab-kyushu/sss/sss"
 	"github.com/ulikunitz/xz"
 	"github.com/urfave/cli"
@@ -42,6 +44,7 @@ type distributeOpt struct {
 	ChunkSize int
 	Size      int
 	Threshold int
+	Log       io.Writer
 }
 
 // CmdDistribute executes distribute command.
@@ -59,26 +62,42 @@ func CmdDistribute(c *cli.Context) (err error) {
 	if err != nil {
 		return
 	}
+	var log io.Writer
+	if c.Bool("quiet") {
+		log = ioutil.Discard
+	} else {
+		log = os.Stderr
+	}
 
 	return cmdDistribute(&distributeOpt{
 		Filename:  c.Args().Get(0),
 		ChunkSize: c.Int("chunk"),
 		Size:      size,
 		Threshold: threshold,
+		Log:       log,
 	})
 }
 
 func cmdDistribute(opt *distributeOpt) (err error) {
 
+	fmt.Fprintln(opt.Log, "Reading the secret file.")
 	secret, err := ioutil.ReadFile(opt.Filename)
 	if err != nil {
 		return
 	}
 
+	fmt.Fprintln(opt.Log, "Computing shares.")
 	shares, err := sss.Distribute(secret, opt.ChunkSize, opt.Size, opt.Threshold)
 	if err != nil {
 		return
 	}
+
+	fmt.Fprint(opt.Log, "Writing share files.")
+	bar := pb.New(len(shares))
+	bar.Output = opt.Log
+	bar.Prefix("Files")
+	bar.Start()
+	defer bar.Finish()
 
 	wg, ctx := errgroup.WithContext(context.Background())
 	semaphore := make(chan struct{}, runtime.NumCPU())
@@ -92,6 +111,7 @@ func cmdDistribute(opt *distributeOpt) (err error) {
 			case semaphore <- struct{}{}:
 				wg.Go(func() (err error) {
 					defer func() { <-semaphore }()
+					defer bar.Increment()
 
 					data, err := json.Marshal(s)
 					if err != nil {
