@@ -1,0 +1,36 @@
+baseurl = "https://itslab-kyushu.github.io/sss/"
+languageCode = "en-us"
+metadataformat = "yaml"
+title = "Alabaster"
+theme = "hugo-alabaster-theme"
+
+disqusShortname = ""
+googleAnalytics = "UA-89247555-1"
+
+[params]
+	name = "SSS"
+	description = "An implementation of a secret sharing scheme."
+
+	github_user   = "itslab-kyushu"
+	github_repo   = "sss"
+	github_banner = true
+
+	custom_css = []
+	custom_js  = []
+
+	highlightjs = "css/highlight.css"
+	favicon = "favicon.ico"
+
+[params.sidebar]
+	logo = "favicon.ico"
+
+	github_button  = true
+	travis_button  = false
+	codecov_button = false
+	gratipay = ""
+
+	show_relations = false
+
+[params.footer]
+	copyright = "[Junpei Kawamoto](https://github.com/jkawamoto/) | Icon by [Clipart Kid](http://www.clipartkid.com/)"
+	show_powered_by = true
