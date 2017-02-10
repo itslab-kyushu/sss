@@ -22,17 +22,27 @@
 package command
 
 import (
+	"context"
 	"encoding/json"
+	"fmt"
+	"io"
 	"io/ioutil"
+	"os"
+	"runtime"
 	"strings"
 
+	"golang.org/x/sync/errgroup"
+
+	"github.com/cheggaaa/pb"
 	"github.com/itslab-kyushu/sss/sss"
+	"github.com/ulikunitz/xz"
 	"github.com/urfave/cli"
 )
 
 type reconstructOpt struct {
 	ShareFiles []string
 	OutputFile string
+	Log        io.Writer
 }
 
 // CmdReconstruct executes reconstruct command.
@@ -49,31 +59,76 @@ func CmdReconstruct(c *cli.Context) error {
 	if opt.OutputFile == "" {
 		opt.OutputFile = outputFile(opt.ShareFiles[0])
 	}
+	if c.Bool("quiet") {
+		opt.Log = ioutil.Discard
+	} else {
+		opt.Log = os.Stderr
+	}
 
 	return cmdReconstruct(opt)
 
 }
 
-func cmdReconstruct(opt *reconstructOpt) error {
+func cmdReconstruct(opt *reconstructOpt) (err error) {
+
+	fmt.Fprint(opt.Log, "Reading share files.")
+	bar := pb.New(len(opt.ShareFiles))
+	bar.Output = opt.Log
+	bar.Prefix("Files")
+	bar.Start()
+	defer bar.Finish()
+
+	wg, ctx := errgroup.WithContext(context.Background())
+	semaphore := make(chan struct{}, runtime.NumCPU())
 
 	shares := make([]sss.Share, len(opt.ShareFiles))
 	for i, f := range opt.ShareFiles {
 
-		data, err := ioutil.ReadFile(f)
-		if err != nil {
-			return err
-		}
+		func(i int, f string) {
 
-		if err = json.Unmarshal(data, &shares[i]); err != nil {
-			return err
-		}
+			select {
+			case <-ctx.Done():
+				return
+			case semaphore <- struct{}{}:
+				wg.Go(func() (err error) {
+					defer func() { <-semaphore }()
+					defer bar.Increment()
+
+					fp, err := os.Open(f)
+					if err != nil {
+						return
+					}
+					defer fp.Close()
+
+					r, err := xz.NewReader(fp)
+					if err != nil {
+						return
+					}
+					data, err := ioutil.ReadAll(r)
+					if err != nil {
+						return
+					}
+					return json.Unmarshal(data, &shares[i])
+
+				})
+
+			}
+
+		}(i, f)
 
 	}
 
+	if err = wg.Wait(); err != nil {
+		return err
+	}
+
+	fmt.Fprintln(opt.Log, "Reconstructing the secret.")
 	secret, err := sss.Reconstruct(shares)
 	if err != nil {
 		return err
 	}
+
+	fmt.Fprintln(opt.Log, "Writing the secret file.")
 	return ioutil.WriteFile(opt.OutputFile, secret, 0644)
 
 }

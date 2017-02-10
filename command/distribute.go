@@ -22,12 +22,20 @@
 package command
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
+	"os"
+	"runtime"
 	"strconv"
 
+	"golang.org/x/sync/errgroup"
+
+	"github.com/cheggaaa/pb"
 	"github.com/itslab-kyushu/sss/sss"
+	"github.com/ulikunitz/xz"
 	"github.com/urfave/cli"
 )
 
@@ -36,6 +44,7 @@ type distributeOpt struct {
 	ChunkSize int
 	Size      int
 	Threshold int
+	Log       io.Writer
 }
 
 // CmdDistribute executes distribute command.
@@ -53,40 +62,96 @@ func CmdDistribute(c *cli.Context) (err error) {
 	if err != nil {
 		return
 	}
+	var log io.Writer
+	if c.Bool("quiet") {
+		log = ioutil.Discard
+	} else {
+		log = os.Stderr
+	}
 
 	return cmdDistribute(&distributeOpt{
 		Filename:  c.Args().Get(0),
 		ChunkSize: c.Int("chunk"),
 		Size:      size,
 		Threshold: threshold,
+		Log:       log,
 	})
 }
 
 func cmdDistribute(opt *distributeOpt) (err error) {
 
+	fmt.Fprintln(opt.Log, "Reading the secret file.")
 	secret, err := ioutil.ReadFile(opt.Filename)
 	if err != nil {
 		return
 	}
 
+	fmt.Fprintln(opt.Log, "Computing shares.")
 	shares, err := sss.Distribute(secret, opt.ChunkSize, opt.Size, opt.Threshold)
 	if err != nil {
 		return
 	}
 
+	fmt.Fprint(opt.Log, "Writing share files.")
+	bar := pb.New(len(shares))
+	bar.Output = opt.Log
+	bar.Prefix("Files")
+	bar.Start()
+	defer bar.Finish()
+
+	wg, ctx := errgroup.WithContext(context.Background())
+	semaphore := make(chan struct{}, runtime.NumCPU())
 	for i, s := range shares {
 
-		data, err := json.Marshal(s)
-		if err != nil {
-			return err
-		}
+		func(i int, s sss.Share) {
 
-		filename := fmt.Sprintf("%s.%d.json", opt.Filename, i)
-		if err = ioutil.WriteFile(filename, data, 0644); err != nil {
-			return err
-		}
+			select {
+			case <-ctx.Done():
+				return
+			case semaphore <- struct{}{}:
+				wg.Go(func() (err error) {
+					defer func() { <-semaphore }()
+					defer bar.Increment()
+
+					data, err := json.Marshal(s)
+					if err != nil {
+						return
+					}
+
+					fp, err := os.OpenFile(fmt.Sprintf("%s.%d.xz", opt.Filename, i), os.O_WRONLY|os.O_CREATE, 0644)
+					if err != nil {
+						return
+					}
+					defer fp.Close()
+
+					w, err := xz.NewWriter(fp)
+					if err != nil {
+						return
+					}
+					defer w.Close()
+
+					for {
+						select {
+						case <-ctx.Done():
+							return ctx.Err()
+						default:
+							n, err := w.Write(data)
+							if err != nil {
+								return err
+							}
+							if n == len(data) {
+								return nil
+							}
+							data = data[n:]
+						}
+					}
+
+				})
+			}
+
+		}(i, s)
 
 	}
 
-	return nil
+	return wg.Wait()
 }
