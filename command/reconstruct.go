@@ -31,9 +31,10 @@ import (
 	"runtime"
 	"strings"
 
+	pb "gopkg.in/cheggaaa/pb.v1"
+
 	"golang.org/x/sync/errgroup"
 
-	"github.com/cheggaaa/pb"
 	"github.com/itslab-kyushu/sss/sss"
 	"github.com/ulikunitz/xz"
 	"github.com/urfave/cli"
