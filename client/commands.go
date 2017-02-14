@@ -26,8 +26,12 @@ import (
 	"os"
 
 	"github.com/itslab-kyushu/sss/client/command/local"
+	"github.com/itslab-kyushu/sss/client/command/remote"
 	"github.com/urfave/cli"
 )
+
+// DefaultConfFile defines the default configuration file name.
+const DefaultConfFile = "sss.yml"
 
 // GlobalFlags defines a set of global flags.
 var GlobalFlags = []cli.Flag{
@@ -39,6 +43,87 @@ var GlobalFlags = []cli.Flag{
 
 // Commands defines a set of commands.
 var Commands = []cli.Command{
+	{
+		Name:  "remote",
+		Usage: "Access remote SSS servers",
+		Subcommands: cli.Commands{
+			{
+				Name:        "get",
+				Usage:       "Download shares and reconstruct a file",
+				Description: "Download shares from a given set of servers and reconstruct original file.",
+				ArgsUsage:   "<file name>",
+				Action:      remote.CmdGet,
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "config",
+						Usage: "Server configuration `FILE`.",
+						Value: DefaultConfFile,
+					},
+					cli.StringFlag{
+						Name:  "output",
+						Usage: "Store the reconstructed secret to the `FILE`.",
+					},
+					cli.IntFlag{
+						Name:  "max-connection",
+						Usage: "Maximum connections",
+						Value: 10,
+					},
+				},
+			},
+			{
+				Name:        "put",
+				Usage:       "Distribute and store shares",
+				Description: "Create shares of the given file and upload them to servers.",
+				ArgsUsage:   "<file> <number of shares> <threshold>",
+				Action:      remote.CmdPut,
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "config",
+						Usage: "Server configuration `FILE`.",
+						Value: DefaultConfFile,
+					},
+					cli.IntFlag{
+						Name:  "chunk",
+						Usage: "Byte `size` of each chunk.",
+						Value: 256,
+					},
+					cli.IntFlag{
+						Name:  "max-connection",
+						Usage: "Maximum connections",
+						Value: 10,
+					},
+				},
+			},
+			{
+				Name:        "delete",
+				Usage:       "Delete a file from all servers",
+				Description: "Delete a file from all servers.",
+				ArgsUsage:   "<file name>",
+				Action:      remote.CmdDelete,
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "config",
+						Usage: "Server configuration `FILE`.",
+						Value: DefaultConfFile,
+					},
+				},
+			},
+			{
+				Name:        "list",
+				Usage:       "Get a list of files stored in servers",
+				Description: "Receive a list of files stored in a random server.",
+				ArgsUsage:   " ",
+				Action:      remote.CmdList,
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "config",
+						Usage: "Server configuration `FILE`.",
+						Value: DefaultConfFile,
+					},
+				},
+			},
+		},
+	},
 	{
 		Name:  "local",
 		Usage: "Run local file based on a Secret Sharing scheme",
