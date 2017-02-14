@@ -10,7 +10,7 @@ weight: 0
 ---
 [![GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
 [![Build Status](https://travis-ci.org/itslab-kyushu/sss.svg?branch=master)](https://travis-ci.org/itslab-kyushu/sss)
-[![Release](https://img.shields.io/badge/release-0.2.0-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.2.0)
+[![Release](https://img.shields.io/badge/release-0.3.0-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.0)
 
 This software provides both a [GO](https://golang.org/)
 [library](https://godoc.org/github.com/itslab-kyushu/sss/sss) implementing
