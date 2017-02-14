@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Alabaster</title>
+    <title>An implementation of a secret sharing scheme.</title>
     <link>https://itslab-kyushu.github.io/sss/index.xml</link>
-    <description>Recent content on Alabaster</description>
+    <description>Recent content on An implementation of a secret sharing scheme.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 09 Feb 2017 00:00:00 +0000</lastBuildDate>
