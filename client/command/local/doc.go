@@ -1,5 +1,5 @@
 //
-// command/doc.go
+// client/command/local/doc.go
 //
 // Copyright (c) 2017 Junpei Kawamoto
 //
@@ -19,5 +19,6 @@
 // along with sss.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-// Package command implements distribute and reconstruct commands of sss.
-package command
+// Package local implements distribute and reconstruct shares on a local
+// environment commands of sss.
+package local

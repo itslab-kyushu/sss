@@ -1,5 +1,5 @@
 //
-// command/reconstruct.go
+// client/command/local/reconstruct.go
 //
 // Copyright (c) 2017 Junpei Kawamoto
 //
@@ -19,7 +19,7 @@
 // along with sss.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-package command
+package local
 
 import (
 	"context"

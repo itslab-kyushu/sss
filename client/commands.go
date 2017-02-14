@@ -25,7 +25,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/itslab-kyushu/sss/command"
+	"github.com/itslab-kyushu/sss/client/command/local"
 	"github.com/urfave/cli"
 )
 
@@ -40,29 +40,35 @@ var GlobalFlags = []cli.Flag{
 // Commands defines a set of commands.
 var Commands = []cli.Command{
 	{
-		Name:        "distribute",
-		Usage:       "Distribute a file",
-		ArgsUsage:   "<file> <share size> <threshold>",
-		Description: "distribute command makes a set of shares of a given file.",
-		Action:      command.CmdDistribute,
-		Flags: []cli.Flag{
-			cli.IntFlag{
-				Name:  "chunk",
-				Usage: "Byte `size` of each chunk.",
-				Value: 256,
+		Name:  "local",
+		Usage: "Run local file based on a Secret Sharing scheme",
+		Subcommands: cli.Commands{
+			{
+				Name:        "distribute",
+				Usage:       "Distribute a file",
+				ArgsUsage:   "<file> <share size> <threshold>",
+				Description: "distribute command makes a set of shares of a given file.",
+				Action:      local.CmdDistribute,
+				Flags: []cli.Flag{
+					cli.IntFlag{
+						Name:  "chunk",
+						Usage: "Byte `size` of each chunk.",
+						Value: 256,
+					},
+				},
 			},
-		},
-	},
-	{
-		Name:        "reconstruct",
-		Usage:       "Reconstruct a file from a set of secrets",
-		ArgsUsage:   "<file>...",
-		Description: "reconstruct command reconstructs a file from a given set of shares.",
-		Action:      command.CmdReconstruct,
-		Flags: []cli.Flag{
-			cli.StringFlag{
-				Name:  "output",
-				Usage: "Store the reconstructed secret to the `FILE`.",
+			{
+				Name:        "reconstruct",
+				Usage:       "Reconstruct a file from a set of secrets",
+				ArgsUsage:   "<file>...",
+				Description: "reconstruct command reconstructs a file from a given set of shares.",
+				Action:      local.CmdReconstruct,
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "output",
+						Usage: "Store the reconstructed secret to the `FILE`.",
+					},
+				},
 			},
 		},
 	},

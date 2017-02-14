@@ -1,5 +1,5 @@
 //
-// command/distribute.go
+// client/command/local/distribute.go
 //
 // Copyright (c) 2017 Junpei Kawamoto
 //
@@ -19,7 +19,7 @@
 // along with sss.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-package command
+package local
 
 import (
 	"context"
