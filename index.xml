@@ -17,19 +17,29 @@
       <guid>https://itslab-kyushu.github.io/sss/cli/</guid>
       <description>
 
-&lt;p&gt;The command line tool which this software provides is called &lt;code&gt;sss&lt;/code&gt;.
-It has two commands, &lt;code&gt;distribute&lt;/code&gt; and &lt;code&gt;reconstruct&lt;/code&gt;,
-to create shares from a secret file and reconstruct the secret files from
-shares, respectively.&lt;/p&gt;
-
 &lt;p&gt;The secret sharing scheme this command provides is a simple
 &lt;a href=&#34;http://dx.doi.org/10.1007/978-3-642-20901-7_2&#34;&gt;&lt;em&gt;k&lt;/em&gt;-out-of-&lt;em&gt;n&lt;/em&gt; threshold secret sharing&lt;/a&gt;,
 which means totally &lt;em&gt;n&lt;/em&gt; shares will be made from one secret file,
 and you need to at least &lt;em&gt;k&lt;/em&gt; shares to reconstruct the secret.&lt;/p&gt;
 
-&lt;h2 id=&#34;distribute&#34;&gt;Distribute&lt;/h2&gt;
+&lt;h2 id=&#34;client-usage&#34;&gt;Client Usage&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code&gt;$ sss distribute &amp;lt;file&amp;gt; &amp;lt;number of shares&amp;gt; &amp;lt;threshold&amp;gt;
+&lt;p&gt;The client application provides two way to run the threshold Secret Sharing
+scheme (SSS).
+One of them is local mode, which stores shares into a local file system.
+The other one is remote mode, which stores shares into servers provided the
+server command.&lt;/p&gt;
+
+&lt;h3 id=&#34;local-mode&#34;&gt;Local mode&lt;/h3&gt;
+
+&lt;p&gt;The local mode provides two sub commands, distribute and reconstruct.
+Distribute command reads a file and creates a set of shares,
+on the other hand, reconstruct command reads a set of shares and reconstructs
+the original file.&lt;/p&gt;
+
+&lt;h4 id=&#34;distribute&#34;&gt;Distribute&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sss local distribute &amp;lt;file&amp;gt; &amp;lt;number of shares&amp;gt; &amp;lt;threshold&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;This command produces share files and the file name of i-th share has &lt;code&gt;.i.xz&lt;/code&gt;
@@ -40,9 +50,9 @@ each chunk.
 The given secret file is divided to chunks based on this size and distributed
 in shares.&lt;/p&gt;
 
-&lt;h2 id=&#34;reconstruct&#34;&gt;Reconstruct&lt;/h2&gt;
+&lt;h4 id=&#34;reconstruct&#34;&gt;Reconstruct&lt;/h4&gt;
 
-&lt;pre&gt;&lt;code&gt;$ sss reconstruct &amp;lt;file&amp;gt;...
+&lt;pre&gt;&lt;code&gt;$ sss local reconstruct &amp;lt;file&amp;gt;...
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;It produces a file based on the given share&amp;rsquo;s file name by removing the above
@@ -52,6 +62,97 @@ For example, if the names of share files are &lt;code&gt;sample.txt.1.xz&lt;/cod
 will be &lt;code&gt;sample.txt&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;You can use &lt;code&gt;--output&lt;/code&gt; flag to use another file name.&lt;/p&gt;
+
+&lt;h3 id=&#34;remote-mode&#34;&gt;Remote mode&lt;/h3&gt;
+
+&lt;p&gt;Remote mode provides four sub command: get, put, delete, and list.
+All commands take a YAML based server configuration file.
+The format is as follows:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;servers:
+  - address: 192.168.0.1
+    port: 13009
+  - address: 192.168.0.2
+    port: 13009
+  - address: 192.168.1.1
+    port: 13009
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The above example defines three servers.&lt;/p&gt;
+
+&lt;p&gt;The get command gathers shares from the servers defined the configuration file,
+and put command distributes shares to the servers.&lt;/p&gt;
+
+&lt;p&gt;The default name of the configuration file is &lt;code&gt;sss.yml&lt;/code&gt; but you can set another
+name via &lt;code&gt;--config&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;h4 id=&#34;get&#34;&gt;Get&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;sss remote get --config sss.yml --output result.dat &amp;lt;file name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Get command gathers shares associated with the given file name from the servers
+defined in the configuration file, and then reconstructs and stores them as
+the given file name via &lt;code&gt;--output&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;p&gt;If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/code&gt; is used, and if &lt;code&gt;--output&lt;/code&gt; flag is
+omitted, &lt;code&gt;&amp;lt;file name&amp;gt;&lt;/code&gt; is used.&lt;/p&gt;
+
+&lt;p&gt;To find available file names, use list command.&lt;/p&gt;
+
+&lt;p&gt;The number of groups and the number of total servers must be greater then or
+equal to the group threshold and the data threshold, which are given when those
+shares were created.&lt;/p&gt;
+
+&lt;h4 id=&#34;put&#34;&gt;Put&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;sss remote put --config sss.yml &amp;lt;file&amp;gt; &amp;lt;threshold&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Put command reads the given file and runs distribute procedure to create shares.
+The threshold is a parameter of SSS.
+The number of total shares are as same as defined in the server configuration
+file.&lt;/p&gt;
+
+&lt;p&gt;If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/code&gt; is used.&lt;/p&gt;
+
+&lt;p&gt;Put command also takes &lt;code&gt;--chunk&lt;/code&gt; flag to set the byte size of each chunk.
+The default value is 256.
+The distribute procedure creates a finite filed Z/pZ, where p is a prime number
+which has chunk size + 1 bit length.&lt;/p&gt;
+
+&lt;h3 id=&#34;delete&#34;&gt;Delete&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;sss remote delete --config sss.yml &amp;lt;file name&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Delete command deletes all shares associated with the given file name from all
+servers defined in the configuration file.&lt;/p&gt;
+
+&lt;p&gt;If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/code&gt; is used.&lt;/p&gt;
+
+&lt;h3 id=&#34;list&#34;&gt;List&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;sss remote list --config sss.yml
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;List command shows all file names stored in the servers.
+If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/code&gt; is used.&lt;/p&gt;
+
+&lt;h2 id=&#34;server-usage&#34;&gt;Server Usage&lt;/h2&gt;
+
+&lt;p&gt;The server application runs a simple data store service using SSS.&lt;/p&gt;
+
+&lt;p&gt;It takes three flags,&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;--port&lt;/code&gt;: the port number the server will listen,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--root&lt;/code&gt;: the document root path to store uploaded shares,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--no-compress&lt;/code&gt;: if set, all shares will be stored without compression.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If those flags are omitted, default values are used.
+Thus, you can start a server by just run &lt;code&gt;sss-server&lt;/code&gt;.&lt;/p&gt;
 </description>
     </item>
     
@@ -187,6 +288,72 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.&lt;/p&gt;
 
+&lt;h2 id=&#34;go-support-for-protocol-buffers-https-github-com-golang-protobuf&#34;&gt;&lt;a href=&#34;https://github.com/golang/protobuf&#34;&gt;Go support for Protocol Buffers&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Copyright 2010 The Go Authors.  All rights reserved.
+&lt;a href=&#34;https://github.com/golang/protobuf&#34;&gt;https://github.com/golang/protobuf&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;* Redistributions of source code must retain the above copyright
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of Google Inc. nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.&lt;/p&gt;
+
+&lt;p&gt;THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+&amp;ldquo;AS IS&amp;rdquo; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.&lt;/p&gt;
+
+&lt;h2 id=&#34;grpc-go-https-github-com-grpc-grpc-go&#34;&gt;&lt;a href=&#34;https://github.com/grpc/grpc-go&#34;&gt;gRPC-Go&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Copyright 2014, Google Inc.
+All rights reserved.&lt;/p&gt;
+
+&lt;p&gt;Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;* Redistributions of source code must retain the above copyright
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of Google Inc. nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.&lt;/p&gt;
+
+&lt;p&gt;THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+&amp;ldquo;AS IS&amp;rdquo; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.&lt;/p&gt;
+
 &lt;h2 id=&#34;pb-https-github-com-cheggaaa-pb&#34;&gt;&lt;a href=&#34;https://github.com/cheggaaa/pb&#34;&gt;pb&lt;/a&gt;&lt;/h2&gt;
 
 &lt;p&gt;Copyright &amp;copy; 2012-2015, Sergey Cherepanov&lt;/p&gt;
@@ -246,6 +413,22 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.&lt;/p&gt;
+
+&lt;h2 id=&#34;yaml-support-for-the-go-language-https-github-com-go-yaml-yaml&#34;&gt;&lt;a href=&#34;https://github.com/go-yaml/yaml&#34;&gt;YAML support for the Go language&lt;/a&gt;&lt;/h2&gt;
+
+&lt;p&gt;Copyright 2011-2016 Canonical Ltd.&lt;/p&gt;
+
+&lt;p&gt;Licensed under the Apache License, Version 2.0 (the &amp;ldquo;License&amp;rdquo;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.apache.org/licenses/LICENSE-2.0&#34;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &amp;ldquo;AS IS&amp;rdquo; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.&lt;/p&gt;
 </description>
     </item>
     
@@ -268,21 +451,45 @@ reconstructs your secret files.&lt;/p&gt;
 
 &lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
 
-&lt;p&gt;If you want to use this software as a library or you&amp;rsquo;re familiar with Go,&lt;/p&gt;
+&lt;p&gt;If you are only interested in our secret sharing library for Go,&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ go get github.com/itslab-kyushu/sss
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ go get -d github.com/itslab-kyushu/sss
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;If you&amp;rsquo;re a &lt;a href=&#34;http://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; user,&lt;/p&gt;
+&lt;p&gt;If you are interested in our server/client application,
+compiled binaries of them are available on
+&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases&#34;&gt;Github&lt;/a&gt;.
+After downloading a binary to your environment, decompress and put it in a path
+included in $PATH.&lt;/p&gt;
+
+&lt;p&gt;If you&amp;rsquo;re a &lt;a href=&#34;http://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; user,
+you can install the client application by&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ brew tap itslab-kyushu/sss
 $ brew install sss
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Otherwise, you can fine compiled binaries on
-&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases&#34;&gt;Github&lt;/a&gt;.
-After downloading a binary to your environment, decompress and put it in a path
-included in $PATH.&lt;/p&gt;
+&lt;p&gt;You can also compile by yourself.
+First, you need to download the code base:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git clone https://github.com/itslab-kyushu/sss $GOPATH/src/itslab-kyushu/sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, build client command &lt;code&gt;sss&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd $GOPATH/src/itslab-kyushu/sss/client
+$ go get -d -t -v .
+$ go build -o sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and build server command &lt;code&gt;sss-server&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd $GOPATH/src/itslab-kyushu/sss/server
+$ go get -d -t -v .
+$ go build -o sss-server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To build both commands, &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt; &amp;gt; 1.7.4 is required.&lt;/p&gt;
 
 &lt;h2 id=&#34;license&#34;&gt;License&lt;/h2&gt;
 
