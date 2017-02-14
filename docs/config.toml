@@ -1,7 +1,7 @@
 baseurl = "https://itslab-kyushu.github.io/sss/"
 languageCode = "en-us"
 metadataformat = "yaml"
-title = "Alabaster"
+title = "An implementation of a secret sharing scheme."
 theme = "hugo-alabaster-theme"
 
 disqusShortname = ""
