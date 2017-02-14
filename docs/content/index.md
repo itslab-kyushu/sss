@@ -5,6 +5,7 @@ menu:
   main:
     Name: Top
 date: 2017-02-09
+lastmod: 2017-02-14
 weight: 0
 ---
 [![GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
@@ -18,23 +19,50 @@ reconstructs your secret files.
 
 
 ## Installation
-If you want to use this software as a library or you're familiar with Go,
+If you are only interested in our secret sharing library for Go,
 
 ```sh
-$ go get github.com/itslab-kyushu/sss
+$ go get -d github.com/itslab-kyushu/sss
 ```
 
+If you are interested in our server/client application,
+compiled binaries of them are available on
+[Github](https://github.com/itslab-kyushu/sss/releases).
+After downloading a binary to your environment, decompress and put it in a path
+included in $PATH.
+
 If you're a [Homebrew](http://brew.sh/) user,
+you can install the client application by
 
 ```sh
 $ brew tap itslab-kyushu/sss
 $ brew install sss
 ```
 
-Otherwise, you can fine compiled binaries on
-[Github](https://github.com/itslab-kyushu/sss/releases).
-After downloading a binary to your environment, decompress and put it in a path
-included in $PATH.
+You can also compile by yourself.
+First, you need to download the code base:
+
+```
+$ git clone https://github.com/itslab-kyushu/sss $GOPATH/src/itslab-kyushu/sss
+```
+
+Then, build client command `sss`:
+
+```
+$ cd $GOPATH/src/itslab-kyushu/sss/client
+$ go get -d -t -v .
+$ go build -o sss
+```
+
+and build server command `sss-server`:
+
+```
+$ cd $GOPATH/src/itslab-kyushu/sss/server
+$ go get -d -t -v .
+$ go build -o sss-server
+```
+
+To build both commands, [Go](https://golang.org/) > 1.7.4 is required.
 
 
 ## License
