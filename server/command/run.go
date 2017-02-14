@@ -45,7 +45,8 @@ func CmdRun(c *cli.Context) (err error) {
 		log = os.Stderr
 	}
 
-	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", c.GlobalInt("port")))
+	port := c.GlobalInt("port")
+	listen, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		return
 	}
@@ -75,7 +76,7 @@ func CmdRun(c *cli.Context) (err error) {
 		Log:      log,
 	})
 
-	fmt.Fprintln(log, "Start listening.")
+	fmt.Fprintln(log, "Start listening:", port)
 	return s.Serve(listen)
 
 }
