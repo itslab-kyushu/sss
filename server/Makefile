@@ -1,5 +1,5 @@
 #
-# client/Makefile
+# server/Makefile
 #
 # Copyright (c) 2017 Junpei Kawamoto
 #
@@ -19,23 +19,11 @@
 # along with sss.  If not, see <http://www.gnu.org/licenses/>.
 #
 VERSION = snapshot
-SUBDIRS := client server
+.PHONY: build get-deps
 default: build
-.PHONY: build release test get-deps proto docker $(SUBDIRS)
 
-build: $(SUBDIRS)
-
-$(SUBDIRS):
-	$(MAKE) -C $@
-
-release:
-	ghr  -u itslab-kyushu  v$(VERSION) pkg/$(VERSION)
-
-test: get-deps
-	go test -v ./...
+build: get-deps
+	goxc -d=../pkg -pv=$(VERSION) -os="linux,darwin,windows,freebsd,openbsd" -n=sss-server
 
 get-deps:
-	for dir in $(SUBDIRS); do $(MAKE) -C "$$dir" get-deps; done
-
-proto:
-	protoc --go_out=plugins=grpc:. kvs/kvs.proto
+	go get -d -t -v .

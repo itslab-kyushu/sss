@@ -1,5 +1,5 @@
 //
-// commands.go
+// server/commands.go
 //
 // Copyright (c) 2017 Junpei Kawamoto
 //
@@ -25,48 +25,38 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/itslab-kyushu/sss/command"
 	"github.com/urfave/cli"
 )
 
 // GlobalFlags defines a set of global flags.
 var GlobalFlags = []cli.Flag{
+	cli.IntFlag{
+		Name:  "port",
+		Usage: "Listening `port` number",
+		Value: 13009,
+	},
+	cli.StringFlag{
+		Name:  "root",
+		Usage: "Document root `path`",
+		Value: "data",
+	},
+	cli.BoolFlag{
+		Name:  "no-compress",
+		Usage: "Store data files without compression",
+	},
+	cli.IntFlag{
+		Name:  "max-message-size",
+		Usage: "Maximum acceptable message `byte` size",
+		Value: 1024 * 1024 * 256,
+	},
 	cli.BoolFlag{
 		Name:  "quiet",
-		Usage: "not output logging infroamtion",
+		Usage: "Omit printing logging information.",
 	},
 }
 
 // Commands defines a set of commands.
-var Commands = []cli.Command{
-	{
-		Name:        "distribute",
-		Usage:       "Distribute a file",
-		ArgsUsage:   "<file> <share size> <threshold>",
-		Description: "distribute command makes a set of shares of a given file.",
-		Action:      command.CmdDistribute,
-		Flags: []cli.Flag{
-			cli.IntFlag{
-				Name:  "chunk",
-				Usage: "Byte `size` of each chunk.",
-				Value: 256,
-			},
-		},
-	},
-	{
-		Name:        "reconstruct",
-		Usage:       "Reconstruct a file from a set of secrets",
-		ArgsUsage:   "<file>...",
-		Description: "reconstruct command reconstructs a file from a given set of shares.",
-		Action:      command.CmdReconstruct,
-		Flags: []cli.Flag{
-			cli.StringFlag{
-				Name:  "output",
-				Usage: "Store the reconstructed secret to the `FILE`.",
-			},
-		},
-	},
-}
+var Commands = cli.Commands{}
 
 // CommandNotFound handles an error that the given command is not found.
 func CommandNotFound(c *cli.Context, command string) {

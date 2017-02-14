@@ -1,5 +1,5 @@
 //
-// command/reconstruct_test.go
+// client/command/local/reconstruct_test.go
 //
 // Copyright (c) 2017 Junpei Kawamoto
 //
@@ -19,7 +19,7 @@
 // along with sss.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-package command
+package local
 
 import "testing"
 
