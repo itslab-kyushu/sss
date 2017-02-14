@@ -88,7 +88,7 @@ func cmdDelete(opt *deleteOpt) (err error) {
 	for _, server := range opt.Config.Servers {
 
 		semaphore <- struct{}{}
-		func(server *cfg.Server) {
+		func(server cfg.Server) {
 			wg.Go(func() (err error) {
 				defer func() { <-semaphore }()
 				defer bar.Increment()
@@ -111,7 +111,7 @@ func cmdDelete(opt *deleteOpt) (err error) {
 				return
 
 			})
-		}(&server)
+		}(server)
 
 	}
 

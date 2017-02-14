@@ -107,7 +107,7 @@ func cmdGet(opt *getOpt) (err error) {
 		default:
 		}
 
-		func(server *cfg.Server, i int) {
+		func(server cfg.Server, i int) {
 
 			semaphore <- struct{}{}
 			wg.Go(func() (err error) {
@@ -142,7 +142,7 @@ func cmdGet(opt *getOpt) (err error) {
 
 			})
 
-		}(&server, i)
+		}(server, i)
 		i++
 
 	}

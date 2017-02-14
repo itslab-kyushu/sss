@@ -44,7 +44,6 @@ import (
 // putOpt defines option values for cmdPut.
 type putOpt struct {
 	Filename    string
-	Size        int
 	Threshold   int
 	Config      *cfg.Config
 	NConnection int
@@ -55,7 +54,7 @@ type putOpt struct {
 // CmdPut prepares put command and run cmdPut.
 func CmdPut(c *cli.Context) (err error) {
 
-	if c.NArg() != 3 {
+	if c.NArg() != 2 {
 		return cli.ShowSubcommandHelp(c)
 	}
 	conf, err := cfg.ReadConfig(c.String("config"))
@@ -63,12 +62,7 @@ func CmdPut(c *cli.Context) (err error) {
 		return
 	}
 
-	size, err := strconv.Atoi(c.Args().Get(1))
-	if err != nil {
-		return
-	}
-
-	threshold, err := strconv.Atoi(c.Args().Get(2))
+	threshold, err := strconv.Atoi(c.Args().Get(1))
 	if err != nil {
 		return
 	}
@@ -82,7 +76,6 @@ func CmdPut(c *cli.Context) (err error) {
 
 	return cmdPut(&putOpt{
 		Filename:    c.Args().First(),
-		Size:        size,
 		Threshold:   threshold,
 		Config:      conf,
 		NConnection: c.Int("max-connection"),
@@ -101,7 +94,7 @@ func cmdPut(opt *putOpt) (err error) {
 
 	fmt.Fprintln(opt.Log, "Creating shares")
 	ctx := context.Background()
-	shares, err := sss.Distribute(secret, opt.ChunkSize, opt.Size, opt.Threshold)
+	shares, err := sss.Distribute(secret, opt.ChunkSize, opt.Config.NServers(), opt.Threshold)
 	if err != nil {
 		return
 	}
@@ -125,7 +118,7 @@ func cmdPut(opt *putOpt) (err error) {
 		default:
 		}
 
-		func(server *cfg.Server, i int) {
+		func(server cfg.Server, i int) {
 
 			semaphore <- struct{}{}
 			wg.Go(func() (err error) {
@@ -154,7 +147,7 @@ func cmdPut(opt *putOpt) (err error) {
 
 			})
 
-		}(&server, i)
+		}(server, i)
 		i++
 
 	}
