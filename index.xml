@@ -442,7 +442,7 @@ limitations under the License.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;https://www.gnu.org/copyleft/gpl.html&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/license-GPLv3-blue.svg&#34; alt=&#34;GPLv3&#34; /&gt;&lt;/a&gt;
 &lt;a href=&#34;https://travis-ci.org/itslab-kyushu/sss&#34;&gt;&lt;img src=&#34;https://travis-ci.org/itslab-kyushu/sss.svg?branch=master&#34; alt=&#34;Build Status&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases/tag/v0.2.0&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/release-0.2.0-brightgreen.svg&#34; alt=&#34;Release&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases/tag/v0.3.0&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/release-0.3.0-brightgreen.svg&#34; alt=&#34;Release&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;This software provides both a &lt;a href=&#34;https://golang.org/&#34;&gt;GO&lt;/a&gt;
 &lt;a href=&#34;https://godoc.org/github.com/itslab-kyushu/sss/sss&#34;&gt;library&lt;/a&gt; implementing
