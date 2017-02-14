@@ -1,0 +1,54 @@
+//
+// kvs/kvs.proto
+//
+// Copyright (c) 2017 Junpei Kawamoto
+//
+// This file is part of sss.
+//
+// sss is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// sss is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with sss.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+syntax = "proto3";
+package kvs;
+
+// Key defines a simple key in the KVS.
+message Key{
+  string name = 1;
+}
+
+// Value represents a share in SSS.
+message Value{
+  string field = 1;
+  string key = 2;
+  repeated string shares = 3;
+}
+
+// Entry defines a pair of key and value as an entry in the KVS.
+message Entry{
+  Key key = 1;
+  Value value = 2;
+}
+
+// Define empty requests/responses.
+message PutResponse{}
+message DeleteResponse{}
+message ListRequest{}
+
+// Define the KVS service.
+service Kvs{
+  rpc Get(Key) returns (Value){}
+  rpc Put(Entry) returns (PutResponse){}
+  rpc Delete(Key) returns (DeleteResponse){}
+  rpc List(ListRequest) returns (stream Key){}
+}

@@ -8,21 +8,20 @@
 # http://opensource.org/licenses/mit-license.php
 #
 VERSION = snapshot
-
 default: build
+.PHONY: build release test get-deps proto
 
-.PHONY: build
 build:
 	goxc -d=pkg -pv=$(VERSION) -os="linux,darwin,windows,freebsd,openbsd"
 
-.PHONY: release
 release:
 	ghr  -u itslab-kyushu  v$(VERSION) pkg/$(VERSION)
 
-.PHONY: test
 test:
 	go test -v ./...
 
-.PHONY: get-deps
 get-deps:
 	go get -d -t -v .
+
+proto:
+	protoc --go_out=plugins=grpc:. kvs/kvs.proto
