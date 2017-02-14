@@ -74,7 +74,7 @@ var Commands = []cli.Command{
 				Name:        "put",
 				Usage:       "Distribute and store shares",
 				Description: "Create shares of the given file and upload them to servers.",
-				ArgsUsage:   "<file> <number of shares> <threshold>",
+				ArgsUsage:   "<file> <threshold>",
 				Action:      remote.CmdPut,
 				Flags: []cli.Flag{
 					cli.StringFlag{
