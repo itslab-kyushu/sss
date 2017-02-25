@@ -1,23 +1,27 @@
 # An implementation of Shamir's secret sharing
 [![GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
-[![Build Status](https://travis-ci.org/itslab-kyushu/sss.svg?branch=master)](https://travis-ci.org/itslab-kyushu/sss)
+[![CircleCI](https://circleci.com/gh/itslab-kyushu/sss/tree/master.svg?style=svg)](https://circleci.com/gh/itslab-kyushu/sss/tree/master)
 [![wercker status](https://app.wercker.com/status/16562999f1f803486bd8893c1dec21e6/s/master "wercker status")](https://app.wercker.com/project/byKey/16562999f1f803486bd8893c1dec21e6)
 [![Release](https://img.shields.io/badge/release-0.3.0-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.0)
+[![Dockerhub](https://img.shields.io/badge/dockerhub-itslabq%2Fsss-blue.svg)](https://hub.docker.com/r/itslabq/sss/)
+[![MicroBadger](https://images.microbadger.com/badges/image/itslabq/sss.svg)](https://microbadger.com/images/itslabq/sss)
 
-This software provides both a [GO](https://golang.org/)
+This software provides both a [Go](https://golang.org/)
 [library](https://godoc.org/github.com/itslab-kyushu/sss/sss) implementing
 a Secret Sharing scheme and a command line tool which distributes and
 reconstructs your secret files.
 
 
 ## Installation
+### Go library
 If you are only interested in our secret sharing library for Go,
 
 ```sh
 $ go get -d github.com/itslab-kyushu/sss
 ```
 
-If you are interested in our server/client application,
+### Client/Server application
+If you are interested in our client/server application,
 compiled binaries of them are available on
 [Github](https://github.com/itslab-kyushu/sss/releases).
 After downloading a binary to your environment, decompress and put it in a path
@@ -56,6 +60,21 @@ $ go build -o sss-server
 
 To build both commands, [Go](https://golang.org/) > 1.7.4 is required.
 
+### Server application as a Docker image
+We have a docker image [itslabq/sss](https://hub.docker.com/r/itslabq/sss/)
+which includes a compiled binary of the server application.
+
+Containers created from this image exposes port 13009 and a volume `/data`
+where all uploaded data will be stored.
+
+To run this server image;
+
+```
+$ docker run -d --name sss-server -p 13009:13009 -v $(pwd)/data:/data itslabq/sss
+```
+
+The above command mounts `./data` to `/data` in the container so that all data
+are store in `./data`.
 
 ## Client Usage
 The client application provides two way to run the threshold Secret Sharing

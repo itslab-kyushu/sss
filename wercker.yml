@@ -16,3 +16,4 @@ deploy:
     - jkawamoto/ghp-import:
         token: $GIT_TOKEN
         basedir: docs/public
+        msg: Update documentation [skip ci]
