@@ -61,7 +61,7 @@ func CmdRun(c *cli.Context) (err error) {
 			return err
 		}
 	} else if !info.IsDir() {
-		return fmt.Errorf("Given document root isn't a directory:", root)
+		return fmt.Errorf("Given document root isn't a directory: %v", root)
 	}
 	fmt.Fprintln(log, "Document root is set to", root)
 
