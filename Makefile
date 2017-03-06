@@ -39,3 +39,8 @@ get-deps:
 
 proto:
 	protoc --go_out=plugins=grpc:. kvs/kvs.proto
+
+docker:
+	cd server && GOOS=linux GOARCH=amd64 go build -o sss-server
+	docker build -t itslabq/sss -f dockerfile/Dockerfile .
+	rm server/sss-server
