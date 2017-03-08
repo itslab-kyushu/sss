@@ -1,5 +1,5 @@
 #
-# client/Makefile
+# Makefile
 #
 # Copyright (c) 2017 Junpei Kawamoto
 #
