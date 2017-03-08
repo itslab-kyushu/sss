@@ -2,18 +2,26 @@
 title: API Reference
 menu: main
 date: 2017-02-09
-weight: 20
+lastmod: 2017-03-08
+weight: 30
 ---
-This software provides package `github.com/itslab-kyushu/sss/sss`.
-This package implements Distribute and Reconstruct functions, which execute
-distribute and reconstruct procedures defined in a Secret Sharing scheme.
+[![GoDoc](https://godoc.org/github.com/itslab-kyushu/sss/sss?status.svg)](https://godoc.org/github.com/itslab-kyushu/sss/sss)
+
+Package `github.com/itslab-kyushu/sss/sss` provides Distribute and Reconstruct
+functions, which execute distribute and reconstruct procedures defined in the
+threshold Secret Sharing scheme.
 It also provides useful structures, Field and Polynomial.
 
-This page explains a base usage of those functions.
+This page explains a basic usage of those functions.
 See [godoc](https://godoc.org/github.com/itslab-kyushu/sss/sss) for the detailed
 information.
 
-## Distribute
+## Installation
+```sh
+$ go get -d github.com/itslab-kyushu/sss
+```
+## Example
+### Compute shares from a secret
 Distribute function takes secret, chunk size, the total number of shares,
 and minimum number of shares to reconstruct the secret, in this order,
 and returns a slice of shares.
@@ -44,7 +52,7 @@ for i, s := range shares {
 }
 ```
 
-## Reconstruct
+### Reconstruct the secret
 Reconstruct takes a slice of shares and returns the secret in a slice of bytes.
 
 The following example reads a set of share files, reconstruct the secret, and
@@ -52,9 +60,9 @@ writes it to a file.
 
 
 ```go
-// shares is a slice of file names of shares.
-shares := make([]sss.Share, len(shares))
-for i, f := range shares {
+// filenames is a slice of file names of shares.
+shares := make([]sss.Share, len(filenames))
+for i, f := range filenames {
 
   data, err := ioutil.ReadFile(f)
   if err != nil {

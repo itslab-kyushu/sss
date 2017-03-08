@@ -5,6 +5,7 @@
 [![Release](https://img.shields.io/badge/release-0.3.0-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.0)
 [![Dockerhub](https://img.shields.io/badge/dockerhub-itslabq%2Fsss-blue.svg)](https://hub.docker.com/r/itslabq/sss/)
 [![MicroBadger](https://images.microbadger.com/badges/image/itslabq/sss.svg)](https://microbadger.com/images/itslabq/sss)
+[![GoDoc](https://godoc.org/github.com/itslab-kyushu/sss/sss?status.svg)](https://godoc.org/github.com/itslab-kyushu/sss/sss)
 
 This software provides both a [Go](https://golang.org/)
 [library](https://godoc.org/github.com/itslab-kyushu/sss/sss) implementing

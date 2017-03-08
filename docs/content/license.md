@@ -3,10 +3,12 @@ title: Licenses
 description: License information of sss.
 menu: main
 date: 2017-02-09
-lastmod: 2017-02-14
+lastmod: 2017-03-08
 slug: licenses
 weight: 50
 ---
+[![GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
+
 This software is released under the GPLv3.
 
 Copyright (C) 2017 Junpei Kawamoto
