@@ -11,11 +11,24 @@ dependencies:
 compile:
   override:
     - cd server && go build -o sss-server
+    - docker build --rm=false -t itslabq/sss -f dockerfile/Dockerfile .
 
 test:
-  post:
-    - docker info
-    - docker build --rm=false -t itslabq/sss -f dockerfile/Dockerfile .
+  pre:
+    -|
+      cat << EOS > client/sss.yml
+      servers:
+        - address: 127.0.0.1
+          port: 13009
+      EOS
+  override:
+    - make test
+    - docker run -d --name sss-server -p 13009:13009 itslabq/sss
+    - cd client && go build
+    - cd client && client remote put sss.yml
+    - cd client && client remote get sss.yml --output sss2.yml
+    - cd client && diff sss.yml sss2.yml
+    - docker kill sss-server && docker rm sss-server
 
 deployment:
   hub:
