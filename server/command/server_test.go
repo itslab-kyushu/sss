@@ -24,6 +24,7 @@ package command
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"testing"
@@ -45,8 +46,8 @@ func TestServer(t *testing.T) {
 
 	ctx := context.Background()
 	server := &Server{
-		Root: root,
-		Log:  os.Stdout,
+		Root:   root,
+		Logger: log.New(os.Stdout, "", log.LstdFlags),
 	}
 
 	entry := &kvs.Entry{
@@ -144,8 +145,8 @@ func TestList(t *testing.T) {
 	}
 
 	server := Server{
-		Root: root,
-		Log:  os.Stdout,
+		Root:   root,
+		Logger: log.New(os.Stdout, "", log.LstdFlags),
 	}
 	mock := mockListServer{}
 	err = server.List(&kvs.ListRequest{}, &mock)
