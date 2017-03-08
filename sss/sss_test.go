@@ -21,9 +21,15 @@
 
 package sss
 
-import "testing"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"log"
+	"testing"
+)
 
-func TestSS1(t *testing.T) {
+func TestSSS(t *testing.T) {
 
 	var err error
 
@@ -48,7 +54,7 @@ func TestSS1(t *testing.T) {
 
 }
 
-func TestSS1Word(t *testing.T) {
+func TestSSSWord(t *testing.T) {
 
 	var err error
 
@@ -69,6 +75,64 @@ func TestSS1Word(t *testing.T) {
 	}
 	if string(res) != secret {
 		t.Error("SS1 is broken:", res, secret)
+	}
+
+}
+
+// Example code for Distribute function.
+func ExampleDistribute() {
+	chunksize := 256
+	totalShares := 10
+	threshold := 5
+
+	secret, err := ioutil.ReadFile("secret-file")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	shares, err := Distribute(secret, chunksize, totalShares, threshold)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for i, s := range shares {
+		data, err := json.Marshal(s)
+		if err != nil {
+			log.Fatal(err)
+		}
+		filename := fmt.Sprintf("%s.%d.json", "share-", i)
+		if err = ioutil.WriteFile(filename, data, 0644); err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+// Example code for Reconstruct function.
+func ExampleReconstruct() {
+	// filenames is a slice of file names of shares.
+	filenames := []string{"share1.dat", "share2.dat", "share3.dat"}
+
+	shares := make([]Share, len(filenames))
+	for i, f := range filenames {
+
+		data, err := ioutil.ReadFile(f)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if err = json.Unmarshal(data, &shares[i]); err != nil {
+			log.Fatal(err)
+		}
+
+	}
+
+	secret, err := Reconstruct(shares)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = ioutil.WriteFile("secret-file", secret, 0644)
+	if err != nil {
+		log.Fatal(err)
 	}
 
 }
