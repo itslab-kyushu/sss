@@ -1,3 +1,8 @@
+## 0.3.1 (2017-03-08)
+### Update
+- Logging format in the server application.
+
+
 ## 0.3.0 (2017-02-14)
 ### Added
 - Server/client application of a key-value store maintaining secret shares.
