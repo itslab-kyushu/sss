@@ -6,56 +6,55 @@
     <description>Recent content on An implementation of a secret sharing scheme.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Feb 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 08 Mar 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://itslab-kyushu.github.io/sss/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Command line usage</title>
-      <link>https://itslab-kyushu.github.io/sss/cli/</link>
-      <pubDate>Thu, 09 Feb 2017 00:00:00 +0000</pubDate>
+      <title>Local mode</title>
+      <link>https://itslab-kyushu.github.io/sss/local/</link>
+      <pubDate>Wed, 08 Mar 2017 00:00:00 +0000</pubDate>
       
-      <guid>https://itslab-kyushu.github.io/sss/cli/</guid>
+      <guid>https://itslab-kyushu.github.io/sss/local/</guid>
       <description>
 
-&lt;p&gt;The secret sharing scheme this command provides is a simple
-&lt;a href=&#34;http://dx.doi.org/10.1007/978-3-642-20901-7_2&#34;&gt;&lt;em&gt;k&lt;/em&gt;-out-of-&lt;em&gt;n&lt;/em&gt; threshold secret sharing&lt;/a&gt;,
-which means totally &lt;em&gt;n&lt;/em&gt; shares will be made from one secret file,
-and you need to at least &lt;em&gt;k&lt;/em&gt; shares to reconstruct the secret.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases/tag/v0.3.0&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/release-0.3.0-brightgreen.svg&#34; alt=&#34;Release&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;h2 id=&#34;client-usage&#34;&gt;Client Usage&lt;/h2&gt;
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
-&lt;p&gt;The client application provides two way to run the threshold Secret Sharing
-scheme (SSS).
-One of them is local mode, which stores shares into a local file system.
-The other one is remote mode, which stores shares into servers provided the
-server command.&lt;/p&gt;
+&lt;p&gt;Local mode of the client application provides two commands, distribute and
+reconstruct.
+Distribute command reads a given file and computes shares of
+the &lt;em&gt;k&lt;/em&gt;-out-of-&lt;em&gt;n&lt;/em&gt; threshold secret sharing scheme.
+It means totally &lt;em&gt;n&lt;/em&gt; shares will be made from a secret file,
+and you must have at least &lt;em&gt;k&lt;/em&gt; shares to reconstruct the secret.
+Reconstruct command does that phase, i.e. it reads at least &lt;em&gt;k&lt;/em&gt; share files and
+reconstruct the secret file.&lt;/p&gt;
 
-&lt;h3 id=&#34;local-mode&#34;&gt;Local mode&lt;/h3&gt;
+&lt;h2 id=&#34;distribute-command&#34;&gt;Distribute command&lt;/h2&gt;
 
-&lt;p&gt;The local mode provides two sub commands, distribute and reconstruct.
-Distribute command reads a file and creates a set of shares,
-on the other hand, reconstruct command reads a set of shares and reconstructs
-the original file.&lt;/p&gt;
-
-&lt;h4 id=&#34;distribute&#34;&gt;Distribute&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;$ sss local distribute &amp;lt;file&amp;gt; &amp;lt;number of shares&amp;gt; &amp;lt;threshold&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sss local distribute &amp;lt;file&amp;gt; &amp;lt;number of shares&amp;gt; &amp;lt;threshold&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;This command produces share files and the file name of i-th share has &lt;code&gt;.i.xz&lt;/code&gt;
-as the suffix.&lt;/p&gt;
+&lt;p&gt;This command reads a secret file &lt;code&gt;&amp;lt;file&amp;gt;&lt;/code&gt; and makes share files.
+Each share file will be compressed by xz,
+and the file name of &lt;em&gt;i&lt;/em&gt;-th share has suffix &lt;code&gt;.i.xz&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;You need to specify the number of shares this command totally makes by
+&lt;code&gt;&amp;lt;number of shares&amp;gt;&lt;/code&gt;, and how many shares are required to reconstruct the secret
+by &lt;code&gt;&amp;lt;threshold&amp;gt;&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;This command also takes an optional flag &lt;code&gt;--chunk&lt;/code&gt; to specify the byte size of
 each chunk.
 The given secret file is divided to chunks based on this size and distributed
 in shares.&lt;/p&gt;
 
-&lt;h4 id=&#34;reconstruct&#34;&gt;Reconstruct&lt;/h4&gt;
+&lt;h2 id=&#34;reconstruct-command&#34;&gt;Reconstruct command&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code&gt;$ sss local reconstruct &amp;lt;file&amp;gt;...
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sss local reconstruct &amp;lt;file&amp;gt;...
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;It produces a file based on the given share&amp;rsquo;s file name by removing the above
+&lt;p&gt;This command reconstructs a secret from a list of share files.
+It produces a file based on the given share&amp;rsquo;s file name by removing the above
 suffix.
 For example, if the names of share files are &lt;code&gt;sample.txt.1.xz&lt;/code&gt;,
 &lt;code&gt;sample.txt.2.xz&lt;/code&gt;, &amp;hellip;, then the default file name of the reconstructed secret
@@ -63,11 +62,90 @@ will be &lt;code&gt;sample.txt&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;You can use &lt;code&gt;--output&lt;/code&gt; flag to use another file name.&lt;/p&gt;
 
-&lt;h3 id=&#34;remote-mode&#34;&gt;Remote mode&lt;/h3&gt;
+&lt;h2 id=&#34;tutorial&#34;&gt;Tutorial&lt;/h2&gt;
 
-&lt;p&gt;Remote mode provides four sub command: get, put, delete, and list.
-All commands take a YAML based server configuration file.
-The format is as follows:&lt;/p&gt;
+&lt;p&gt;Suppose &lt;code&gt;secret.dat&lt;/code&gt; is a secret file and distributing it using 3-out-of-10
+threshold secret sharing scheme.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sss local distribute secret.dat 10 3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The above command creates a set of secrets, &lt;code&gt;secret.dat.1.xz&lt;/code&gt;, &lt;code&gt;secret.dat.2.xz&lt;/code&gt;,
+&amp;hellip;, &lt;code&gt;secret.dat.10.xz&lt;/code&gt;.
+We can store each share file into a different storage in order to prevent
+information leakage, and now we can delete the secret file &lt;code&gt;secret.dat&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;To reconstruct the secret from shares, we must to collect at least 3 share
+files. Suppose we have &lt;code&gt;secret.dat.1.xz&lt;/code&gt;, &lt;code&gt;secret.dat.2.xz&lt;/code&gt;, and
+&lt;code&gt;secret.dat.5.xz&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sss local reconstruct secret.dat.1.xz secret.dat.2.xz secret.dat.5.xz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The above command reconstructs the secret and stores it as &lt;code&gt;secret.dat&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;If you&amp;rsquo;re a &lt;a href=&#34;http://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; user,
+you can install the client application by&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ brew tap itslab-kyushu/sss
+$ brew install sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Compiled binaries for some platforms are available on
+&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases&#34;&gt;Github&lt;/a&gt;.
+To use these binaries, after downloading a binary to your environment, decompress and put it in a directory included in your $PATH.&lt;/p&gt;
+
+&lt;p&gt;You can also compile the client application by yourself.
+To compile it, you first download the code base:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ git clone https://github.com/itslab-kyushu/sss $GOPATH/src/itslab-kyushu/sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, build the client application &lt;code&gt;sss&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cd $GOPATH/src/itslab-kyushu/sss/client
+$ go get -d -t -v .
+$ go build -o sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To build the command, &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt; &amp;gt; 1.7.4 is required.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Remote mode</title>
+      <link>https://itslab-kyushu.github.io/sss/remote/</link>
+      <pubDate>Wed, 08 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://itslab-kyushu.github.io/sss/remote/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases/tag/v0.3.0&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/release-0.3.0-brightgreen.svg&#34; alt=&#34;Release&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Remote mode of the client application provides an interface to a client/server
+style data storage service.
+This mode has four commands:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;get: download a set of shares and reconstruct a secret,&lt;/li&gt;
+&lt;li&gt;put: creates a set of shares from a secret and upload each share to each
+server,&lt;/li&gt;
+&lt;li&gt;delete: delete shares associated with a given secret file,&lt;/li&gt;
+&lt;li&gt;list: show names of secret files stored in the data storage service,&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;and all commands connect a set of &lt;a href=&#34;server&#34;&gt;data storage servers&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To specify address information of those servers, all commands receives a
+configuration file in YAML.
+The configuration file has one root element &lt;code&gt;servers&lt;/code&gt; and it takes a list of
+server information, which is an object consisting of two element &lt;code&gt;address&lt;/code&gt; and
+&lt;code&gt;port&lt;/code&gt;.
+The following example defines three servers in a same network:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;servers:
   - address: 192.168.0.1
@@ -78,39 +156,41 @@ The format is as follows:&lt;/p&gt;
     port: 13009
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The above example defines three servers.&lt;/p&gt;
+&lt;p&gt;The default name of the configuration file is &lt;code&gt;sss.yml&lt;/code&gt; but you can set another
+name via &lt;code&gt;--config&lt;/code&gt; flag.&lt;/p&gt;
 
 &lt;p&gt;The get command gathers shares from the servers defined the configuration file,
 and put command distributes shares to the servers.&lt;/p&gt;
 
-&lt;p&gt;The default name of the configuration file is &lt;code&gt;sss.yml&lt;/code&gt; but you can set another
-name via &lt;code&gt;--config&lt;/code&gt; flag.&lt;/p&gt;
+&lt;h2 id=&#34;get-command&#34;&gt;Get command&lt;/h2&gt;
 
-&lt;h4 id=&#34;get&#34;&gt;Get&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;sss remote get --config sss.yml --output result.dat &amp;lt;file name&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sss remote get --config sss.yml --output result.dat &amp;lt;file name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Get command gathers shares associated with the given file name from the servers
 defined in the configuration file, and then reconstructs and stores them as
 the given file name via &lt;code&gt;--output&lt;/code&gt; flag.&lt;/p&gt;
 
+&lt;p&gt;The number of servers defined in the configuration file must be greater then or
+equal to the threshold which is used to put the secret file.&lt;/p&gt;
+
+&lt;p&gt;This command downloads shares from the servers defined the configuration file,
+even if the number of necessary shares is smaller than the number of the servers
+defined in the configuration file.
+In other words, it is not good to use the same configuration file when you used
+in &lt;code&gt;put&lt;/code&gt; command.&lt;/p&gt;
+
 &lt;p&gt;If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/code&gt; is used, and if &lt;code&gt;--output&lt;/code&gt; flag is
 omitted, &lt;code&gt;&amp;lt;file name&amp;gt;&lt;/code&gt; is used.&lt;/p&gt;
 
 &lt;p&gt;To find available file names, use list command.&lt;/p&gt;
 
-&lt;p&gt;The number of groups and the number of total servers must be greater then or
-equal to the group threshold and the data threshold, which are given when those
-shares were created.&lt;/p&gt;
+&lt;h2 id=&#34;put-command&#34;&gt;Put command&lt;/h2&gt;
 
-&lt;h4 id=&#34;put&#34;&gt;Put&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;sss remote put --config sss.yml &amp;lt;file&amp;gt; &amp;lt;threshold&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sss remote put --config sss.yml &amp;lt;file&amp;gt; &amp;lt;threshold&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Put command reads the given file and runs distribute procedure to create shares.
-The threshold is a parameter of SSS.
 The number of total shares are as same as defined in the server configuration
 file.&lt;/p&gt;
 
@@ -121,9 +201,9 @@ The default value is 256.
 The distribute procedure creates a finite filed Z/pZ, where p is a prime number
 which has chunk size + 1 bit length.&lt;/p&gt;
 
-&lt;h3 id=&#34;delete&#34;&gt;Delete&lt;/h3&gt;
+&lt;h2 id=&#34;delete-command&#34;&gt;Delete command&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code&gt;sss remote delete --config sss.yml &amp;lt;file name&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sss remote delete --config sss.yml &amp;lt;file name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Delete command deletes all shares associated with the given file name from all
@@ -131,19 +211,68 @@ servers defined in the configuration file.&lt;/p&gt;
 
 &lt;p&gt;If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/code&gt; is used.&lt;/p&gt;
 
-&lt;h3 id=&#34;list&#34;&gt;List&lt;/h3&gt;
+&lt;h2 id=&#34;list-command&#34;&gt;List command&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code&gt;sss remote list --config sss.yml
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sss remote list --config sss.yml
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;List command shows all file names stored in the servers.
 If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/code&gt; is used.&lt;/p&gt;
 
-&lt;h2 id=&#34;server-usage&#34;&gt;Server Usage&lt;/h2&gt;
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
 
-&lt;p&gt;The server application runs a simple data store service using SSS.&lt;/p&gt;
+&lt;p&gt;If you&amp;rsquo;re a &lt;a href=&#34;http://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; user,
+you can install the client application by&lt;/p&gt;
 
-&lt;p&gt;It takes three flags,&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ brew tap itslab-kyushu/sss
+$ brew install sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Compiled binaries for some platforms are available on
+&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases&#34;&gt;Github&lt;/a&gt;.
+To use these binaries, after downloading a binary to your environment, decompress and put it in a directory included in your $PATH.&lt;/p&gt;
+
+&lt;p&gt;You can also compile the client application by yourself.
+To compile it, you first download the code base:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ git clone https://github.com/itslab-kyushu/sss $GOPATH/src/itslab-kyushu/sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, build the client application &lt;code&gt;sss&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cd $GOPATH/src/itslab-kyushu/sss/client
+$ go get -d -t -v .
+$ go build -o sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To build the command, &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt; &amp;gt; 1.7.4 is required.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Server application</title>
+      <link>https://itslab-kyushu.github.io/sss/server/</link>
+      <pubDate>Wed, 08 Mar 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://itslab-kyushu.github.io/sss/server/</guid>
+      <description>
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases/tag/v0.3.0&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/release-0.3.0-brightgreen.svg&#34; alt=&#34;Release&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://hub.docker.com/r/itslabq/sss/&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/dockerhub-itslabq%2Fsss-blue.svg&#34; alt=&#34;Dockerhub&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://microbadger.com/images/itslabq/sss&#34;&gt;&lt;img src=&#34;https://images.microbadger.com/badges/image/itslabq/sss.svg&#34; alt=&#34;MicroBadger&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Server application provides a data storage service based on the threshold secret
+sharing scheme.
+The server application is based on &lt;a href=&#34;http://www.grpc.io/&#34;&gt;gRPC&lt;/a&gt;, and you can
+find the service definition in &lt;a href=&#34;https://github.com/itslab-kyushu/sss/blob/master/kvs/kvs.proto&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.grpc.io/&#34;&gt;&lt;img src=&#34;../img/grpc.png&#34; alt=&#34;gRPC&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;usage&#34;&gt;Usage&lt;/h2&gt;
+
+&lt;p&gt;The server application takes three flags,&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;--port&lt;/code&gt;: the port number the server will listen,&lt;/li&gt;
@@ -153,6 +282,40 @@ If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/co
 
 &lt;p&gt;If those flags are omitted, default values are used.
 Thus, you can start a server by just run &lt;code&gt;sss-server&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;docker-support&#34;&gt;Docker support&lt;/h2&gt;
+
+&lt;p&gt;A docker image to run the server, &lt;code&gt;itslabq/sss&lt;/code&gt;, is also available.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.docker.com/&#34;&gt;&lt;img src=&#34;../img/small_h-trans.png&#34; alt=&#34;docker&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Containers based on this image expose port 13009 and store uploaded shares into
+&lt;code&gt;/data&lt;/code&gt;. The following command runs a container with mapping local port 13009
+and &lt;code&gt;$(pwd)/data&lt;/code&gt; to the container&amp;rsquo;s port 13009 and &lt;code&gt;/data&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ docker run -it -p 13009:13009 -v $(pwd)/data:/data itslabq/sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;p&gt;Compiled binaries of the server application &lt;code&gt;sss-server&lt;/code&gt; are available on
+&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases&#34;&gt;Github&lt;/a&gt;.
+To use these binaries, after downloading a binary to your environment, decompress and put it in a directory included in your $PATH.&lt;/p&gt;
+
+&lt;p&gt;You can also compile by yourself.
+First, you need to download the code base:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ git clone https://github.com/itslab-kyushu/sss $GOPATH/src/itslab-kyushu/sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then, build server command &lt;code&gt;sss-server&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ cd $GOPATH/src/itslab-kyushu/sss/server
+$ go get -d -t -v .
+$ go build -o sss-server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To build it, &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt; &amp;gt; 1.7.4 is required.&lt;/p&gt;
 </description>
     </item>
     
@@ -164,16 +327,25 @@ Thus, you can start a server by just run &lt;code&gt;sss-server&lt;/code&gt;.&lt
       <guid>https://itslab-kyushu.github.io/sss/api/</guid>
       <description>
 
-&lt;p&gt;This software provides package &lt;code&gt;github.com/itslab-kyushu/sss/sss&lt;/code&gt;.
-This package implements Distribute and Reconstruct functions, which execute
-distribute and reconstruct procedures defined in a Secret Sharing scheme.
+&lt;p&gt;&lt;a href=&#34;https://godoc.org/github.com/itslab-kyushu/sss/sss&#34;&gt;&lt;img src=&#34;https://godoc.org/github.com/itslab-kyushu/sss/sss?status.svg&#34; alt=&#34;GoDoc&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Package &lt;code&gt;github.com/itslab-kyushu/sss/sss&lt;/code&gt; provides Distribute and Reconstruct
+functions, which execute distribute and reconstruct procedures defined in the
+threshold Secret Sharing scheme.
 It also provides useful structures, Field and Polynomial.&lt;/p&gt;
 
-&lt;p&gt;This page explains a base usage of those functions.
+&lt;p&gt;This page explains a basic usage of those functions.
 See &lt;a href=&#34;https://godoc.org/github.com/itslab-kyushu/sss/sss&#34;&gt;godoc&lt;/a&gt; for the detailed
 information.&lt;/p&gt;
 
-&lt;h2 id=&#34;distribute&#34;&gt;Distribute&lt;/h2&gt;
+&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ go get -d github.com/itslab-kyushu/sss
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+
+&lt;h3 id=&#34;compute-shares-from-a-secret&#34;&gt;Compute shares from a secret&lt;/h3&gt;
 
 &lt;p&gt;Distribute function takes secret, chunk size, the total number of shares,
 and minimum number of shares to reconstruct the secret, in this order,
@@ -204,16 +376,16 @@ for i, s := range shares {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;reconstruct&#34;&gt;Reconstruct&lt;/h2&gt;
+&lt;h3 id=&#34;reconstruct-the-secret&#34;&gt;Reconstruct the secret&lt;/h3&gt;
 
 &lt;p&gt;Reconstruct takes a slice of shares and returns the secret in a slice of bytes.&lt;/p&gt;
 
 &lt;p&gt;The following example reads a set of share files, reconstruct the secret, and
 writes it to a file.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// shares is a slice of file names of shares.
-shares := make([]sss.Share, len(shares))
-for i, f := range shares {
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;// filenames is a slice of file names of shares.
+shares := make([]sss.Share, len(filenames))
+for i, f := range filenames {
 
   data, err := ioutil.ReadFile(f)
   if err != nil {
@@ -242,6 +414,8 @@ return ioutil.WriteFile(&amp;quot;secret-file&amp;quot;, secret, 0644)
       
       <guid>https://itslab-kyushu.github.io/sss/licenses/</guid>
       <description>
+
+&lt;p&gt;&lt;a href=&#34;https://www.gnu.org/copyleft/gpl.html&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/license-GPLv3-blue.svg&#34; alt=&#34;GPLv3&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;This software is released under the GPLv3.&lt;/p&gt;
 
@@ -433,7 +607,7 @@ limitations under the License.&lt;/p&gt;
     </item>
     
     <item>
-      <title>An Implementation of Secret Sharing</title>
+      <title>Threshold Secret Sharing Scheme</title>
       <link>https://itslab-kyushu.github.io/sss/</link>
       <pubDate>Thu, 09 Feb 2017 00:00:00 +0000</pubDate>
       
@@ -441,55 +615,31 @@ limitations under the License.&lt;/p&gt;
       <description>
 
 &lt;p&gt;&lt;a href=&#34;https://www.gnu.org/copyleft/gpl.html&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/license-GPLv3-blue.svg&#34; alt=&#34;GPLv3&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://travis-ci.org/itslab-kyushu/sss&#34;&gt;&lt;img src=&#34;https://travis-ci.org/itslab-kyushu/sss.svg?branch=master&#34; alt=&#34;Build Status&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://circleci.com/gh/itslab-kyushu/sss/tree/master&#34;&gt;&lt;img src=&#34;https://circleci.com/gh/itslab-kyushu/sss/tree/master.svg?style=svg&#34; alt=&#34;CircleCI&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://app.wercker.com/project/byKey/16562999f1f803486bd8893c1dec21e6&#34;&gt;&lt;img src=&#34;https://app.wercker.com/status/16562999f1f803486bd8893c1dec21e6/s/master&#34; alt=&#34;wercker status&#34; title=&#34;wercker status&#34; /&gt;&lt;/a&gt;
 &lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases/tag/v0.3.0&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/release-0.3.0-brightgreen.svg&#34; alt=&#34;Release&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;This software provides both a &lt;a href=&#34;https://golang.org/&#34;&gt;GO&lt;/a&gt;
-&lt;a href=&#34;https://godoc.org/github.com/itslab-kyushu/sss/sss&#34;&gt;library&lt;/a&gt; implementing
-a Secret Sharing scheme and a command line tool which distributes and
-reconstructs your secret files.&lt;/p&gt;
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
-&lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
+&lt;p&gt;This software provides both a &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt;
+&lt;a href=&#34;https://godoc.org/github.com/itslab-kyushu/sss/sss&#34;&gt;library&lt;/a&gt; and
+command line tools implementing the threshold Secret Sharing scheme:&lt;/p&gt;
 
-&lt;p&gt;If you are only interested in our secret sharing library for Go,&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Adi Shamir, &amp;ldquo;&lt;a href=&#34;http://dl.acm.org/ft_gateway.cfm?id=359176&#34;&gt;How to share a secret&lt;/a&gt;,&amp;rdquo;
+Communications of the ACM, 22(11):pp.612–613, 1979.&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ go get -d github.com/itslab-kyushu/sss
-&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;contents&#34;&gt;Contents&lt;/h3&gt;
 
-&lt;p&gt;If you are interested in our server/client application,
-compiled binaries of them are available on
-&lt;a href=&#34;https://github.com/itslab-kyushu/sss/releases&#34;&gt;Github&lt;/a&gt;.
-After downloading a binary to your environment, decompress and put it in a path
-included in $PATH.&lt;/p&gt;
-
-&lt;p&gt;If you&amp;rsquo;re a &lt;a href=&#34;http://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; user,
-you can install the client application by&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ brew tap itslab-kyushu/sss
-$ brew install sss
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;You can also compile by yourself.
-First, you need to download the code base:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ git clone https://github.com/itslab-kyushu/sss $GOPATH/src/itslab-kyushu/sss
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Then, build client command &lt;code&gt;sss&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cd $GOPATH/src/itslab-kyushu/sss/client
-$ go get -d -t -v .
-$ go build -o sss
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;and build server command &lt;code&gt;sss-server&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cd $GOPATH/src/itslab-kyushu/sss/server
-$ go get -d -t -v .
-$ go build -o sss-server
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;To build both commands, &lt;a href=&#34;https://golang.org/&#34;&gt;Go&lt;/a&gt; &amp;gt; 1.7.4 is required.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;To use the threshold secret sharing from another go application,
+see the &lt;a href=&#34;api&#34;&gt;API Reference&lt;/a&gt; page.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;To compute shares and reconstruct a secret in a computer,
+see the &lt;a href=&#34;local&#34;&gt;local mode usage&lt;/a&gt; page.&lt;/li&gt;
+&lt;li&gt;To use a secret sharing based data storage service,
+see the &lt;a href=&#34;remote&#34;&gt;client usage&lt;/a&gt; and &lt;a href=&#34;server&#34;&gt;server usage&lt;/a&gt; pages.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h2 id=&#34;license&#34;&gt;License&lt;/h2&gt;
 

@@ -2,18 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://itslab-kyushu.github.io/sss/cli/</loc>
-    <lastmod>2017-02-14T00:00:00+00:00</lastmod>
+    <loc>https://itslab-kyushu.github.io/sss/local/</loc>
+    <lastmod>2017-03-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://itslab-kyushu.github.io/sss/remote/</loc>
+    <lastmod>2017-03-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://itslab-kyushu.github.io/sss/server/</loc>
+    <lastmod>2017-03-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://itslab-kyushu.github.io/sss/api/</loc>
-    <lastmod>2017-02-09T00:00:00+00:00</lastmod>
+    <lastmod>2017-03-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://itslab-kyushu.github.io/sss/licenses/</loc>
-    <lastmod>2017-02-14T00:00:00+00:00</lastmod>
+    <lastmod>2017-03-08T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -23,7 +33,7 @@
   
   <url>
     <loc>https://itslab-kyushu.github.io/sss/</loc>
-    <lastmod>2017-02-14T00:00:00+00:00</lastmod>
+    <lastmod>2017-03-08T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
