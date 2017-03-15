@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>An implementation of a secret sharing scheme.</title>
+    <title>An implementation of Shamir&#39;s secret sharing scheme.</title>
     <link>https://itslab-kyushu.github.io/sss/index.xml</link>
-    <description>Recent content on An implementation of a secret sharing scheme.</description>
+    <description>Recent content on An implementation of Shamir&#39;s secret sharing scheme.</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 08 Mar 2017 00:00:00 +0000</lastBuildDate>
@@ -138,7 +138,7 @@ server,&lt;/li&gt;
 &lt;li&gt;list: show names of secret files stored in the data storage service,&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;and all commands connect a set of &lt;a href=&#34;server&#34;&gt;data storage servers&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;and all commands connect a set of &lt;a href=&#34;../server&#34;&gt;data storage servers&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;To specify address information of those servers, all commands receives a
 configuration file in YAML.
