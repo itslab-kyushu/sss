@@ -1,4 +1,4 @@
-# An implementation of Shamir's secret sharing
+# Shamir's Threshold Secret Sharing
 [![GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
 [![CircleCI](https://circleci.com/gh/itslab-kyushu/sss/tree/master.svg?style=svg)](https://circleci.com/gh/itslab-kyushu/sss/tree/master)
 [![wercker status](https://app.wercker.com/status/16562999f1f803486bd8893c1dec21e6/s/master "wercker status")](https://app.wercker.com/project/byKey/16562999f1f803486bd8893c1dec21e6)
@@ -7,10 +7,10 @@
 [![MicroBadger](https://images.microbadger.com/badges/image/itslabq/sss.svg)](https://microbadger.com/images/itslabq/sss)
 [![GoDoc](https://godoc.org/github.com/itslab-kyushu/sss/sss?status.svg)](https://godoc.org/github.com/itslab-kyushu/sss/sss)
 
-This software provides both a [Go](https://golang.org/)
+This software provides a [Go](https://golang.org/)
 [library](https://godoc.org/github.com/itslab-kyushu/sss/sss) implementing
-a Secret Sharing scheme and a command line tool which distributes and
-reconstructs your secret files.
+a Secret Sharing scheme, a command line tool which distributes and
+reconstructs your secret files, and a client/server datastore service.
 
 
 ## Installation
@@ -64,6 +64,8 @@ To build both commands, [Go](https://golang.org/) > 1.7.4 is required.
 ### Server application as a Docker image
 We have a docker image [itslabq/sss](https://hub.docker.com/r/itslabq/sss/)
 which includes a compiled binary of the server application.
+
+[![Docker](https://itslab-kyushu.github.io/sss/img/small_h-trans.png)](https://www.docker.com/)
 
 Containers created from this image exposes port 13009 and a volume `/data`
 where all uploaded data will be stored.

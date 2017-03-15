@@ -1,7 +1,7 @@
 baseurl = "https://itslab-kyushu.github.io/sss/"
 languageCode = "en-us"
 metadataformat = "yaml"
-title = "An implementation of a secret sharing scheme."
+title = "An implementation of Shamir's secret sharing scheme."
 theme = "hugo-alabaster-theme"
 
 disqusShortname = ""
@@ -9,11 +9,13 @@ googleAnalytics = "UA-89247555-1"
 
 [params]
 	name = "SSS"
-	description = "An implementation of a secret sharing scheme."
+	description = "An implementation of Shamir's secret sharing scheme."
 
 	github_user   = "itslab-kyushu"
 	github_repo   = "sss"
 	github_banner = true
+
+	addthis = "ra-585b3ef9cae64e1e"
 
 	custom_css = []
 	custom_js  = []

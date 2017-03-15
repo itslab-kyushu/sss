@@ -3,6 +3,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	{{ partial "head" . }}
 
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<script>
+		(adsbygoogle = window.adsbygoogle || []).push({
+			google_ad_client: "ca-pub-4734862314145555",
+			enable_page_level_ads: true
+		});
+	</script>
+
 	<body role="document">
 		<div class="document">
 			<div class="documentwrapper">
@@ -13,6 +21,18 @@
 						{{ if not .IsHome -}}
 						{{ template "_internal/disqus.html" . }}
 						{{- end }}
+
+						<div>
+							<ins class="adsbygoogle"
+				           style="display:block"
+				           data-ad-client="ca-pub-4734862314145555"
+				           data-ad-slot="6733697427"
+				           data-ad-format="auto"></ins>
+							<script>
+							(adsbygoogle = window.adsbygoogle || []).push({});
+							</script>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -31,7 +51,9 @@
 
 			{{ template "_internal/google_analytics.html" . }}
 		</div>
-    <!-- Go to www.addthis.com/dashboard to customize your tools -->
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-585b3ef9cae64e1e"></script> 
+
+		{{ with .Site.Params.addthis }}
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid={{ . }}"></script>
+		{{ end }}
 	</body>
 </html>

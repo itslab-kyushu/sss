@@ -26,7 +26,7 @@ This mode has four commands:
 * delete: delete shares associated with a given secret file,
 * list: show names of secret files stored in the data storage service,
 
-and all commands connect a set of [data storage servers](server).
+and all commands connect a set of [data storage servers](../server).
 
 To specify address information of those servers, all commands receives a
 configuration file in YAML.
