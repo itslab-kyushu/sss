@@ -415,6 +415,8 @@ return ioutil.WriteFile(&amp;quot;secret-file&amp;quot;, secret, 0644)
       <guid>https://itslab-kyushu.github.io/sss/licenses/</guid>
       <description>
 
+&lt;h2 id=&#34;sss&#34;&gt;sss&lt;/h2&gt;
+
 &lt;p&gt;&lt;a href=&#34;https://www.gnu.org/copyleft/gpl.html&#34;&gt;&lt;img src=&#34;https://img.shields.io/badge/license-GPLv3-blue.svg&#34; alt=&#34;GPLv3&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;This software is released under the GPLv3.&lt;/p&gt;
@@ -471,17 +473,17 @@ SOFTWARE.&lt;/p&gt;
 modification, are permitted provided that the following conditions are
 met:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;* Redistributions of source code must retain the above copyright
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
+&lt;ul&gt;
+&lt;li&gt;Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.&lt;/li&gt;
+&lt;li&gt;Redistributions in binary form must reproduce the above
 copyright notice, this list of conditions and the following disclaimer
 in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Google Inc. nor the names of its
+distribution.&lt;/li&gt;
+&lt;li&gt;Neither the name of Google Inc. nor the names of its
 contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.&lt;/p&gt;
+this software without specific prior written permission.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 &amp;ldquo;AS IS&amp;rdquo; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -504,17 +506,17 @@ All rights reserved.&lt;/p&gt;
 modification, are permitted provided that the following conditions are
 met:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;* Redistributions of source code must retain the above copyright
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;notice, this list of conditions and the following disclaimer.
-    * Redistributions in binary form must reproduce the above
+&lt;ul&gt;
+&lt;li&gt;Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.&lt;/li&gt;
+&lt;li&gt;Redistributions in binary form must reproduce the above
 copyright notice, this list of conditions and the following disclaimer
 in the documentation and/or other materials provided with the
-distribution.
-    * Neither the name of Google Inc. nor the names of its
+distribution.&lt;/li&gt;
+&lt;li&gt;Neither the name of Google Inc. nor the names of its
 contributors may be used to endorse or promote products derived from
-this software without specific prior written permission.&lt;/p&gt;
+this software without specific prior written permission.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;p&gt;THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 &amp;ldquo;AS IS&amp;rdquo; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
