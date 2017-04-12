@@ -8,7 +8,7 @@ description: >-
   Server application provides a data storage service based on the threshold
   secret sharing scheme.
 ---
-[![Release](https://img.shields.io/badge/release-0.3.1-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.1)
+[![Release](https://img.shields.io/badge/release-0.3.2-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.2)
 [![Dockerhub](https://img.shields.io/badge/dockerhub-itslabq%2Fsss-blue.svg)](https://hub.docker.com/r/itslabq/sss/)
 [![MicroBadger](https://images.microbadger.com/badges/image/itslabq/sss.svg)](https://microbadger.com/images/itslabq/sss)
 

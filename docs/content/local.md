@@ -14,7 +14,7 @@ description: >-
   Reconstruct command does that phase, i.e. it reads at least *k* share files
   and reconstruct the secret file.
 ---
-[![Release](https://img.shields.io/badge/release-0.3.1-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.1)
+[![Release](https://img.shields.io/badge/release-0.3.2-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.2)
 
 ## Summary
 Local mode of the client application provides two commands, distribute and

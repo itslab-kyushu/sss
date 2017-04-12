@@ -14,7 +14,7 @@ description: >-
 [![GPLv3](https://img.shields.io/badge/license-GPLv3-blue.svg)](https://www.gnu.org/copyleft/gpl.html)
 [![CircleCI](https://circleci.com/gh/itslab-kyushu/sss/tree/master.svg?style=svg)](https://circleci.com/gh/itslab-kyushu/sss/tree/master)
 [![wercker status](https://app.wercker.com/status/16562999f1f803486bd8893c1dec21e6/s/master "wercker status")](https://app.wercker.com/project/byKey/16562999f1f803486bd8893c1dec21e6)
-[![Release](https://img.shields.io/badge/release-0.3.1-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.1)
+[![Release](https://img.shields.io/badge/release-0.3.2-brightgreen.svg)](https://github.com/itslab-kyushu/sss/releases/tag/v0.3.2)
 
 ## Summary
 This software provides both a [Go](https://golang.org/)
