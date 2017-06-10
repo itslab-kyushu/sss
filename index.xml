@@ -89,7 +89,7 @@ files. Suppose we have &lt;code&gt;secret.dat.1.xz&lt;/code&gt;, &lt;code&gt;sec
 &lt;p&gt;If you&amp;rsquo;re a &lt;a href=&#34;http://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; user,
 you can install the client application by&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ brew tap itslab-kyushu/sss
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ brew tap itslab-kyushu/sss
 $ brew install sss
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -164,7 +164,7 @@ and put command distributes shares to the servers.&lt;/p&gt;
 
 &lt;h2 id=&#34;get-command&#34;&gt;Get command&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sss remote get --config sss.yml --output result.dat &amp;lt;file name&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sss remote get --config sss.yml --output result.dat &amp;lt;file name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Get command gathers shares associated with the given file name from the servers
@@ -187,7 +187,7 @@ omitted, &lt;code&gt;&amp;lt;file name&amp;gt;&lt;/code&gt; is used.&lt;/p&gt;
 
 &lt;h2 id=&#34;put-command&#34;&gt;Put command&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sss remote put --config sss.yml &amp;lt;file&amp;gt; &amp;lt;threshold&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sss remote put --config sss.yml &amp;lt;file&amp;gt; &amp;lt;threshold&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Put command reads the given file and runs distribute procedure to create shares.
@@ -203,7 +203,7 @@ which has chunk size + 1 bit length.&lt;/p&gt;
 
 &lt;h2 id=&#34;delete-command&#34;&gt;Delete command&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sss remote delete --config sss.yml &amp;lt;file name&amp;gt;
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sss remote delete --config sss.yml &amp;lt;file name&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Delete command deletes all shares associated with the given file name from all
@@ -213,7 +213,7 @@ servers defined in the configuration file.&lt;/p&gt;
 
 &lt;h2 id=&#34;list-command&#34;&gt;List command&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;sss remote list --config sss.yml
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ sss remote list --config sss.yml
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;List command shows all file names stored in the servers.
@@ -224,7 +224,7 @@ If &lt;code&gt;--config&lt;/code&gt; flag is omitted, &lt;code&gt;sss.yml&lt;/co
 &lt;p&gt;If you&amp;rsquo;re a &lt;a href=&#34;http://brew.sh/&#34;&gt;Homebrew&lt;/a&gt; user,
 you can install the client application by&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ brew tap itslab-kyushu/sss
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ brew tap itslab-kyushu/sss
 $ brew install sss
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -340,7 +340,7 @@ information.&lt;/p&gt;
 
 &lt;h2 id=&#34;installation&#34;&gt;Installation&lt;/h2&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ go get -d github.com/itslab-kyushu/sss
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ go get -d github.com/itslab-kyushu/sss
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
