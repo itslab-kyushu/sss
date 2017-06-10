@@ -86,7 +86,7 @@ The above command reconstructs the secret and stores it as `secret.dat`.
 If you're a [Homebrew](http://brew.sh/) user,
 you can install the client application by
 
-```sh
+```shell
 $ brew tap itslab-kyushu/sss
 $ brew install sss
 ```

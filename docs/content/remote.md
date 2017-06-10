@@ -54,7 +54,7 @@ and put command distributes shares to the servers.
 
 ## Get command
 ```shell
-sss remote get --config sss.yml --output result.dat <file name>
+$ sss remote get --config sss.yml --output result.dat <file name>
 ```
 
 Get command gathers shares associated with the given file name from the servers
@@ -78,7 +78,7 @@ To find available file names, use list command.
 
 ## Put command
 ```shell
-sss remote put --config sss.yml <file> <threshold>
+$ sss remote put --config sss.yml <file> <threshold>
 ```
 
 Put command reads the given file and runs distribute procedure to create shares.
@@ -94,7 +94,7 @@ which has chunk size + 1 bit length.
 
 ## Delete command
 ```shell
-sss remote delete --config sss.yml <file name>
+$ sss remote delete --config sss.yml <file name>
 ```
 
 Delete command deletes all shares associated with the given file name from all
@@ -104,7 +104,7 @@ If `--config` flag is omitted, `sss.yml` is used.
 
 ## List command
 ```shell
-sss remote list --config sss.yml
+$ sss remote list --config sss.yml
 ```
 
 List command shows all file names stored in the servers.
@@ -114,7 +114,7 @@ If `--config` flag is omitted, `sss.yml` is used.
 If you're a [Homebrew](http://brew.sh/) user,
 you can install the client application by
 
-```sh
+```shell
 $ brew tap itslab-kyushu/sss
 $ brew install sss
 ```

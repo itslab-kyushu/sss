@@ -17,7 +17,7 @@ See [godoc](https://godoc.org/github.com/itslab-kyushu/sss/sss) for the detailed
 information.
 
 ## Installation
-```sh
+```shell
 $ go get -d github.com/itslab-kyushu/sss
 ```
 ## Example

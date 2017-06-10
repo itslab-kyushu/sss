@@ -17,10 +17,9 @@ googleAnalytics = "UA-89247555-1"
 
 	addthis = "ra-585b3ef9cae64e1e"
 
-	custom_css = []
+	custom_css = ["css/custom.css"]
 	custom_js  = []
 
-	highlightjs = "css/highlight.css"
 	favicon = "favicon.ico"
 
 [params.sidebar]
