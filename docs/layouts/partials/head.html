@@ -18,4 +18,22 @@
 	{{- else -}}
 	<link rel="shortcut icon" href="{{ $.Site.BaseURL }}favicon.ico" type="image/x-icon"/>
 	{{- end }}
+
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{ .Title }} &middot; {{ .Site.Title }}" />
+  {{ if isset .Params "description" }}
+  <meta name="og:description" content="{{ .Params.description }}" />
+  {{ else }}
+  <meta name="og:description" content="{{ with .Site.Params.description }}{{ . }}{{ end }}" />
+  {{ end }}
+  <meta property="og:image" content="{{ .Site.BaseURL }}{{ .Site.Params.image }}" />
+  <meta property="og:site_name"  content="{{ .Site.Title }}" />
+
+  {{ if isset .Params "description" }}
+  <meta name="twitter:card" content="{{ .Params.description }}" />
+  {{ else }}
+  <meta name="twitter:card" content="{{ with .Site.Params.description }}{{ . }}{{ end }}" />
+  {{ end }}
+  <meta name="twitter:site" content="{{ .Site.Params.twitter }}" />
+
 </head>

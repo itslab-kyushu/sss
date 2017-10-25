@@ -21,6 +21,8 @@ googleAnalytics = "UA-89247555-1"
 	custom_js  = []
 
 	favicon = "favicon.ico"
+  twitter = "@junkawamoto"
+  image = "img/logo.png"
 
 [params.sidebar]
 	logo = "favicon.ico"
