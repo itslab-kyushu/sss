@@ -1,0 +1,88 @@
+#
+# .circleci/config.yml
+#
+# Copyright (c) 2018 Junpei Kawamoto
+#
+# This file is part of sss.
+#
+# simple-kvs is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# simple-kvs is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with simple-kvs.  If not, see <http://www.gnu.org/licenses/>.
+#
+version: 2
+jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Prepare dependencies
+          command: |
+            mkdir -p ~/.go_project/src/github.com/${CIRCLE_PROJECT_USERNAME}
+            ln -s ${HOME}/${CIRCLE_PROJECT_REPONAME} ${HOME}/.go_project/src/github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+            make get-deps
+      - run:
+          name: Build server program
+          command: cd server && go build -o sss-server
+      - run:
+          name: Build a docker image
+          command: docker build --rm=false -t itslabq/$CIRCLE_PROJECT_REPONAME -f dockerfile/Dockerfile .
+      - run:
+          name: Test the image
+          command: |
+            make test
+            ./docker-test.sh
+      - run:
+          name: Save the image
+          command: |
+              mkdir -p ~/caches
+              docker save itslabq/$CIRCLE_PROJECT_REPONAME -o ~/caches/image.tar
+      - save_cache:
+          key: docker-{% raw %}{{ .Revision }}{% endraw %}
+          paths:
+              - ~/caches/image.tar
+  deploy:
+    machine: true
+    steps:
+      - restore_cache:
+          key: docker-{% raw %}{{ .Revision }}{% endraw %}
+          paths:
+              - ~/caches/image.tar
+      - run:
+          name: Load the docker image built in build job
+          command: docker load -i ~/caches/image.tar
+      - run:
+          name: Push the image to DockerHub
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push itslabq/$CIRCLE_PROJECT_REPONAME
+            docker tag itslabq/$CIRCLE_PROJECT_REPONAME itslabq/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG
+            docker push itslabq/$CIRCLE_PROJECT_REPONAME:$CIRCLE_TAG
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: gh-pages
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*$/
+            branches:
+              ignore: /.*/
